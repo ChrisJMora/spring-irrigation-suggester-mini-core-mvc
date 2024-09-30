@@ -8,6 +8,7 @@ import com.example.demo.service.UserServiceImp;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -56,6 +57,7 @@ public class UserController {
             _user.setFirstName(user.getFirstName());
             _user.setLastName(user.getLastName());
             _user.setEmail(user.getEmail());
+            _user.setPassword(user.getPassword());
             // Save updated user
             return ResponseEntity.ok(userService.saveUser(_user));
         } catch (Exception e){
