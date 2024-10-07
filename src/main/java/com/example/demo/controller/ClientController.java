@@ -1,26 +1,26 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.User;
+import com.example.demo.model.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.demo.service.UserServiceImp;
+import com.example.demo.service.ClientServiceImp;
 
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api")
-public class UserController {
+public class ClientController {
 
     @Autowired
-    private UserServiceImp userService;
+    private ClientServiceImp userService;
 
     // Add a new user
     @PostMapping("/create")
-    public ResponseEntity<User> addUser(@RequestBody User newUser){
+    public ResponseEntity<Client> addUser(@RequestBody Client newClient){
         try {
-            return ResponseEntity.ok(userService.saveUser(newUser));
+            return ResponseEntity.ok(userService.saveClient(newClient));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
@@ -28,10 +28,10 @@ public class UserController {
 
     // Get user by id
     @GetMapping("/read/{id}")
-    public ResponseEntity<User> getUserbyId(@PathVariable("id") long id){
+    public ResponseEntity<Client> getUserbyId(@PathVariable("id") long id){
         try {
             // get user from database by id, throw exception if not found
-            return ResponseEntity.ok(userService.getUserById(id));
+            return ResponseEntity.ok(userService.getClientById(id));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
@@ -39,9 +39,9 @@ public class UserController {
 
     // Get all users
     @GetMapping("/read")
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<List<Client>> getAllUsers(){
         try {
-            return ResponseEntity.ok(userService.getAllUsers());
+            return ResponseEntity.ok(userService.getAllClients());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
@@ -49,17 +49,17 @@ public class UserController {
 
     // Update user by id
     @PutMapping("/update/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable long id, @RequestBody User user){
+    public ResponseEntity<Client> updateUser(@PathVariable long id, @RequestBody Client client){
         try {
             // get user from database by id, throw exception if not found
-            User _user = userService.getUserById(id);
-            _user.setId(id);
-            _user.setFirstName(user.getFirstName());
-            _user.setLastName(user.getLastName());
-            _user.setEmail(user.getEmail());
-            _user.setPassword(user.getPassword());
+            Client _client = userService.getClientById(id);
+            _client.setId(id);
+            _client.setFirstName(client.getFirstName());
+            _client.setLastName(client.getLastName());
+            _client.setEmail(client.getEmail());
+            _client.setPassword(client.getPassword());
             // Save updated user
-            return ResponseEntity.ok(userService.saveUser(_user));
+            return ResponseEntity.ok(userService.saveClient(_client));
         } catch (Exception e){
             return ResponseEntity.internalServerError().build();
         }
@@ -69,7 +69,7 @@ public class UserController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable long id){
         try {
-            userService.deleteUser(id);
+            userService.deleteClient(id);
             return ResponseEntity.ok("User deleted");
         } catch (Exception e){
             return ResponseEntity.internalServerError().build();
