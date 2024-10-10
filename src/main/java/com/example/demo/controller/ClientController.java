@@ -1,11 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.exception.ClientUsernameOrEmailAreadyExistsException;
+import com.example.demo.exception.IncorrectCredentialsException;
 import com.example.demo.exception.NoSuchClientExistsException;
-import com.example.demo.model.Client;
-import com.example.demo.model.ApiResult;
+import com.example.demo.model.*;
 import com.example.demo.model.Error;
-import com.example.demo.model.ErrorDetail;
 import com.example.demo.model.ResponseStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,6 +39,24 @@ public class ClientController {
         try {
             return ResponseEntity.status(HttpStatus.FOUND)
                     .body(clientService.getAllClients());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new Error(e.getMessage()));
+        }
+    }
+
+    @PostMapping("/auth")
+    public ResponseEntity<ApiResult> authClient(@RequestBody Credentials credentials) {
+        try {
+            clientService.authClient(credentials);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResult(ResponseStatus.SUCCESS));
+        } catch (NoSuchClientExistsException nscee) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Error(nscee.getMessage()));
+        } catch (IncorrectCredentialsException ice) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new Error(ice.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new Error(e.getMessage()));
