@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 public class NoSuchClientExistsException extends
         RuntimeException {
 
-    private String message;
-
     /**
      * Constructs a new runtime exception with the specified detail message.
      *
@@ -21,6 +19,5 @@ public class NoSuchClientExistsException extends
      */
     public NoSuchClientExistsException(String message) {
         super(message);
-        this.message = message;
     }
 }
