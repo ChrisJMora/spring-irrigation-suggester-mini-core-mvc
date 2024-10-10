@@ -1,9 +1,12 @@
 package com.example.demo.service;
 
 import com.example.demo.exception.ClientUsernameOrEmailAreadyExistsException;
+import com.example.demo.exception.IncorrectCredentialsException;
 import com.example.demo.exception.NoSuchClientExistsException;
 import com.example.demo.model.Client;
+import com.example.demo.model.Credentials;
 import com.example.demo.model.WrappedEntity;
+import com.example.demo.utils.AuthenticationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.demo.persistence.ClientRepository;
@@ -26,6 +29,7 @@ public class ClientServiceImp implements ClientService {
             details.put("email", "The email aready exists");
         }
         if (details.isEmpty()) {
+            client.setPassword(AuthenticationUtil.hashPassword(client.getPassword()));
             return new WrappedEntity<>(clientRepository.save(client));
         } else {
             throw new ClientUsernameOrEmailAreadyExistsException("Invalid " +
@@ -41,6 +45,18 @@ public class ClientServiceImp implements ClientService {
     @Override
     public WrappedEntity<Client> getClient(String username, String email) {
         return new WrappedEntity<>(getClientByUsernameOrEmail(username, email));
+    }
+
+    @Override
+    public void authClient(Credentials credentials) {
+        Client client =
+                getClientByUsernameOrEmail(credentials.getIdentifier(),
+                        credentials.getIdentifier());
+        if (!AuthenticationUtil.verifyPassword(credentials.getPassword(),
+                client.getPassword())) {
+            throw new IncorrectCredentialsException("Login failed. Please verify your " +
+                    "credentials and try again.");
+        }
     }
 
     @Override
@@ -70,7 +86,6 @@ public class ClientServiceImp implements ClientService {
             _client.setEmail(client.getEmail());
             _client.setFirstName(client.getFirstName());
             _client.setLastName(client.getLastName());
-            _client.setPassword(client.getPassword());
             return new WrappedEntity<>(clientRepository.save(_client));
         } else {
             throw new ClientUsernameOrEmailAreadyExistsException("Invalid " +
