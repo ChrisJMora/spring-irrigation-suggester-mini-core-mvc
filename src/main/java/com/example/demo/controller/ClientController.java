@@ -1,78 +1,102 @@
 package com.example.demo.controller;
 
+import com.example.demo.exception.ClientUsernameOrEmailAreadyExistsException;
+import com.example.demo.exception.NoSuchClientExistsException;
 import com.example.demo.model.Client;
+import com.example.demo.model.ApiResult;
+import com.example.demo.model.Error;
+import com.example.demo.model.ErrorDetail;
+import com.example.demo.model.ResponseStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.service.ClientServiceImp;
 
-import java.util.List;
-
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/clients")
 public class ClientController {
 
     @Autowired
-    private ClientServiceImp userService;
+    private ClientServiceImp clientService;
 
-    // Add a new user
     @PostMapping("/create")
-    public ResponseEntity<Client> addUser(@RequestBody Client newClient){
+    public ResponseEntity<ApiResult> addClient(@RequestBody Client client) {
         try {
-            return ResponseEntity.ok(userService.saveClient(newClient));
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(clientService.saveClient(client));
+        } catch (ClientUsernameOrEmailAreadyExistsException caee) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorDetail(caee.getMessage(), caee.getDetails()));
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new Error(e.getMessage()));
         }
     }
 
-    // Get user by id
-    @GetMapping("/read/{id}")
-    public ResponseEntity<Client> getUserbyId(@PathVariable("id") long id){
+    @GetMapping("/all")
+    public ResponseEntity<ApiResult> getAllClients() {
         try {
-            // get user from database by id, throw exception if not found
-            return ResponseEntity.ok(userService.getClientById(id));
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .body(clientService.getAllClients());
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new Error(e.getMessage()));
         }
     }
 
-    // Get all users
-    @GetMapping("/read")
-    public ResponseEntity<List<Client>> getAllUsers(){
+    @GetMapping()
+    public ResponseEntity<ApiResult> getClientByUsernameOrPassword(
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String email) {
         try {
-            return ResponseEntity.ok(userService.getAllClients());
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(clientService.getClient(username, email));
+        } catch (NoSuchClientExistsException nscee) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Error(nscee.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new Error(e.getMessage()));
         }
     }
 
-    // Update user by id
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Client> updateUser(@PathVariable long id, @RequestBody Client client){
+    @PutMapping("/update")
+    public ResponseEntity<ApiResult> updateUser(
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String email,
+            @RequestBody Client client) {
         try {
-            // get user from database by id, throw exception if not found
-            Client _client = userService.getClientById(id);
-            _client.setId(id);
-            _client.setFirstName(client.getFirstName());
-            _client.setLastName(client.getLastName());
-            _client.setEmail(client.getEmail());
-            _client.setPassword(client.getPassword());
-            // Save updated user
-            return ResponseEntity.ok(userService.saveClient(_client));
-        } catch (Exception e){
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(clientService.updateClient(username, email, client));
+        } catch (NoSuchClientExistsException nscee) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Error(nscee.getMessage()));
+        } catch (ClientUsernameOrEmailAreadyExistsException caee) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorDetail(caee.getMessage(), caee.getDetails()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new Error(e.getMessage()));
         }
     }
 
     // Delete user by id
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable long id){
+    @DeleteMapping("/delete")
+    public ResponseEntity<ApiResult> deleteUser(
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String email) {
         try {
-            userService.deleteClient(id);
-            return ResponseEntity.ok("User deleted");
-        } catch (Exception e){
-            return ResponseEntity.internalServerError().build();
+            clientService.deleteClient(username, email);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResult(ResponseStatus.SUCCESS));
+        } catch (NoSuchClientExistsException nscee) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Error(nscee.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new Error(e.getMessage()));
         }
     }
 }
