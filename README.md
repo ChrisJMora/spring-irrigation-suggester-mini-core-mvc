@@ -1,4 +1,4 @@
-# CRUD API RESTful con Spring Boot y MSSQL
+# Backend para Gestión de Usuarios con Spring Boot y MSSQL
 
 Este proyecto es una API RESTful creada con **Spring Boot** para manejar operaciones CRUD sobre clientes. La base de datos utilizada es **Microsoft SQL Server (MSSQL)**, y el frontend está desarrollado en **Vue.js**. El proyecto utiliza **Maven** como gestor de dependencias.
 
