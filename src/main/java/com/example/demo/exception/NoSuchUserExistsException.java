@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
  * @author Christian Jácome
  */
 @NoArgsConstructor
-public class NoSuchClientExistsException extends
+public class NoSuchUserExistsException extends
         RuntimeException {
 
     /**
@@ -17,7 +17,7 @@ public class NoSuchClientExistsException extends
      *
      * @param message the detail message.
      */
-    public NoSuchClientExistsException(String message) {
+    public NoSuchUserExistsException(String message) {
         super(message);
     }
 }

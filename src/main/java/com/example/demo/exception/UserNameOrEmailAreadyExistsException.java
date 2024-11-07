@@ -13,7 +13,7 @@ import java.util.Map;
  */
 @NoArgsConstructor
 @Getter
-public class ClientUsernameOrEmailAreadyExistsException extends
+public class UserNameOrEmailAreadyExistsException extends
         RuntimeException {
 
     private Map<String, String> details;
@@ -23,12 +23,12 @@ public class ClientUsernameOrEmailAreadyExistsException extends
      *
      * @param message the detail message.
      */
-    public ClientUsernameOrEmailAreadyExistsException(String message){
+    public UserNameOrEmailAreadyExistsException(String message){
         super(message);
     }
 
-    public ClientUsernameOrEmailAreadyExistsException(String message,
-                                                      Map<String, String> details)
+    public UserNameOrEmailAreadyExistsException(String message,
+                                                Map<String, String> details)
     {
         super(message);
         this.details = details;

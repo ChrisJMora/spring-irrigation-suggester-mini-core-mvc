@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.model.httpResponse;
 
 public enum ResponseStatus {
     SUCCESS,
