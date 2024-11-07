@@ -34,11 +34,17 @@ public class CropController {
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    @PostMapping("/add")
-    public ResponseEntity<ApiResult> addCrop(@RequestBody Crop crop) {
+    @GetMapping("/add/test")
+    public ResponseEntity<ApiResult> addCrop() {
         try {
+            Crop duplicate = cropService.getAllCrops().getData().getFirst();
+            Crop cropTest = new Crop();
+            cropTest.setName("NUEVO CULTIVO");
+            cropTest.setWaterRequired(100);
+            cropTest.setLocation(duplicate.getLocation());
+            cropTest.setSoil(duplicate.getSoil());
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(cropService.saveCrop(crop));
+                    .body(cropService.saveCrop(cropTest));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new Error(e.getMessage()));

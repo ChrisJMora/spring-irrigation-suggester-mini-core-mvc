@@ -29,14 +29,14 @@ public class ProjectSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(HttpMethod.GET,"/api/*/all").hasAnyRole(
-                                "SUPERVISOR", "ADMINISTRATOR")
-                        .requestMatchers(HttpMethod.POST,"/api/*/add").hasRole(
-                                "ADMINISTRATOR")
-                        .anyRequest().authenticated()
-                )
-                .formLogin(Customizer.withDefaults()); // You can configure your login form here
+            .authorizeHttpRequests(authz -> authz
+                    .requestMatchers(HttpMethod.GET,"/api/*/all").hasAnyRole(
+                            "SUPERVISOR", "ADMINISTRATOR")
+                    .requestMatchers(HttpMethod.POST,"/api/*/add").hasRole(
+                            "ADMINISTRATOR")
+                    .anyRequest().authenticated()
+            )
+            .formLogin(Customizer.withDefaults()); // You can configure your login form here
 
         return http.build();
     }
