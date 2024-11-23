@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.exception.UserNameOrEmailAreadyExistsException;
-import com.example.demo.exception.NoSuchUserExistsException;
+import com.example.demo.exception.admin.UserNameOrEmailAreadyExistsException;
+import com.example.demo.exception.admin.NoSuchUserExistsException;
 import com.example.demo.model.httpResponse.ApiResult;
 import com.example.demo.model.httpResponse.Error;
 import com.example.demo.model.httpResponse.ErrorDetail;
@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import com.example.demo.service.UserServiceImp;
+import com.example.demo.service.imp.UserServiceImp;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
