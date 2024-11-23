@@ -1,9 +1,8 @@
 package com.example.demo.security;
 
-import com.example.demo.exception.IncorrectCredentialsException;
-import com.example.demo.exception.NoSuchUserExistsException;
+import com.example.demo.exception.admin.IncorrectCredentialsException;
+import com.example.demo.exception.admin.NoSuchUserExistsException;
 import com.example.demo.model.admin.UserEntity;
-import com.example.demo.model.admin.UserType;
 import com.example.demo.persistence.UserRepository;
 import com.example.demo.utils.AuthenticationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +10,8 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Component
