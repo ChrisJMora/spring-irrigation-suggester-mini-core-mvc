@@ -1,7 +1,6 @@
 package com.example.demo.model.agriculture;
 
-import com.example.demo.utils.ScheduleStatusConverter;
-import com.example.demo.utils.UserTypeConverter;
+import com.example.demo.utils.converterer.ScheduleStatusConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

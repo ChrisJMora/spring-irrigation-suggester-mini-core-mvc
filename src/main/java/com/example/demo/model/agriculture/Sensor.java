@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,12 +19,9 @@ public class Sensor {
     @Column(name = "sensor_id")
     private Long id;
 
-    @Column(name = "sensor_humidity")
-    private float humidity;
-    @Column(name = "sensor_log")
-    private LocalDateTime log;
-
-    @OneToOne
-    @JoinColumn(name = "crop_id")
+    @ManyToOne
+    @JoinColumn(name = "crop_id", nullable = false)
     private Crop crop;
+    @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<SensorRecord> records;
 }

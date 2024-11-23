@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalTime;
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
@@ -21,6 +24,8 @@ public class Crop {
     private String name;
     @Column(name = "crop_water_required")
     private float waterRequired;
+    @Column(name = "crop_root_height")
+    private float rootHeight;
 
     @OneToOne
     @JoinColumn(name = "location_id")
@@ -28,4 +33,14 @@ public class Crop {
     @OneToOne
     @JoinColumn(name = "soil_id")
     private Soil soil;
+    @OneToMany(mappedBy = "crop", cascade = CascadeType.ALL, orphanRemoval =
+            true, fetch = FetchType.EAGER)
+    private List<Sensor> sensors;
+    @OneToMany(mappedBy = "crop", cascade = CascadeType.ALL, orphanRemoval =
+            true, fetch = FetchType.LAZY)
+    private List<Sprinkler> sprinklers;
+
+    public float getWaterRetainPercentage() {
+        return soil.getWaterRetention();
+    }
 }

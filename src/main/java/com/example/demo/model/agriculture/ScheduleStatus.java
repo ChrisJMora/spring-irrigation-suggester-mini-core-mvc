@@ -1,6 +1,5 @@
 package com.example.demo.model.agriculture;
 
-import com.example.demo.model.admin.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -9,7 +8,8 @@ import lombok.Getter;
 public enum ScheduleStatus {
     PENDING("Pendiente"),
     IN_PROGRESS("En Progreso"),
-    COMPLETE("Completado");
+    COMPLETE("Completado"),
+    CANCELED("Cancelado");
 
     private final String description;
 

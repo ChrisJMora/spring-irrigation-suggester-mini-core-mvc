@@ -1,14 +1,12 @@
 package com.example.demo.model.agriculture;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
+@EqualsAndHashCode
 @Entity
 @Table(name = "location", schema = "agriculture")
 public class Location {
