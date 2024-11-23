@@ -1,9 +1,10 @@
-package com.example.demo.service;
+package com.example.demo.service.imp;
 
-import com.example.demo.exception.UserNameOrEmailAreadyExistsException;
-import com.example.demo.exception.NoSuchUserExistsException;
+import com.example.demo.exception.admin.UserNameOrEmailAreadyExistsException;
+import com.example.demo.exception.admin.NoSuchUserExistsException;
 import com.example.demo.model.admin.UserEntity;
 import com.example.demo.model.httpResponse.WrappedEntity;
+import com.example.demo.service.UserService;
 import com.example.demo.utils.AuthenticationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,12 +1,26 @@
 package com.example.demo.service;
 
-import com.example.demo.model.agriculture.Crop;
+import com.example.demo.exception.EmptyTableException;
+import com.example.demo.exception.SaveRecordFailException;
 import com.example.demo.model.agriculture.Schedule;
-import com.example.demo.model.httpResponse.WrappedEntity;
 
 import java.util.List;
 
 public interface ScheduleService {
-    WrappedEntity<List<Schedule>> getAllSchedules();
-    WrappedEntity<Schedule> saveSchedule(Schedule schedule);
+    /**
+     * Get all schedules from database, if the table is empty then
+     * throw an exception.
+     * @return List of the schedules founded in the database.
+     * @exception EmptyTableException When the table have not records.
+     */
+    List<Schedule> getAllSchedules();
+
+    /**
+     * Create or update a schedule in the database, if the schedule is not
+     * saved then throw an exception.
+     * @param schedule The schedule that will be saved.
+     * @return The saved schedule
+     * @exception SaveRecordFailException When the record couldn't been saved.
+     */
+    Schedule saveSchedule(Schedule schedule);
 }

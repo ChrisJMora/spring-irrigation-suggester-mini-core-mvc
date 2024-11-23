@@ -1,17 +1,13 @@
-package com.example.demo.service;
+package com.example.demo.service.imp;
 
-import com.example.demo.exception.UserNameOrEmailAreadyExistsException;
-import com.example.demo.model.admin.UserEntity;
 import com.example.demo.model.agriculture.Crop;
 import com.example.demo.model.httpResponse.WrappedEntity;
 import com.example.demo.persistence.CropRepository;
-import com.example.demo.utils.AuthenticationUtil;
+import com.example.demo.service.CropService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class CropServiceImp implements CropService {
@@ -20,8 +16,8 @@ public class CropServiceImp implements CropService {
     private CropRepository cropRepository;
 
     @Override
-    public WrappedEntity<List<Crop>> getAllCrops() {
-        return new WrappedEntity<>(cropRepository.findAll());
+    public List<Crop> getAllCrops() {
+        return cropRepository.findAll();
     }
 
     @Override
