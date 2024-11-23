@@ -1,6 +1,6 @@
 package com.example.demo.model.admin;
 
-import com.example.demo.utils.UserTypeConverter;
+import com.example.demo.utils.converterer.UserTypeConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
