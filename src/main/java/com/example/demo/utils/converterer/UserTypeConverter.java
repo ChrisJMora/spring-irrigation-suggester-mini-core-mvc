@@ -1,4 +1,4 @@
-package com.example.demo.utils;
+package com.example.demo.utils.converterer;
 
 import com.example.demo.model.admin.UserType;
 import jakarta.persistence.AttributeConverter;
