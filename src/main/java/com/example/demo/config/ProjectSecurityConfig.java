@@ -36,7 +36,7 @@ public class ProjectSecurityConfig {
                             "ADMINISTRATOR")
                     .anyRequest().authenticated()
             )
-            .formLogin(Customizer.withDefaults()); // You can configure your login form here
+            .formLogin(Customizer.withDefaults());
 
         return http.build();
     }
