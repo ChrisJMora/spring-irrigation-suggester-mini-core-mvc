@@ -8,8 +8,6 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter @Setter
 public class SensorRecordDTO {
     private float humidity;

@@ -6,6 +6,7 @@ import com.example.demo.model.agriculture.Schedule;
 import com.example.demo.model.agriculture.SuggestedSchedule;
 import com.example.demo.model.httpResponse.WrappedEntity;
 import com.example.demo.persistence.ScheduleRepository;
+import com.example.demo.persistence.SuggestedScheduleRepository;
 import com.example.demo.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,9 @@ public class ScheduleServiceImp implements ScheduleService {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
+    @Autowired
+    private SuggestedScheduleRepository suggestedScheduleRepository;
+
     /**
      * Get all schedules from database, if the table is empty then
      * throw an exception.
@@ -29,6 +33,33 @@ public class ScheduleServiceImp implements ScheduleService {
         List<Schedule> schedules = scheduleRepository.findAll();
         if(schedules.isEmpty()) throw new EmptyTableException(Schedule.class);
         return schedules;
+    }
+
+    /**
+     * Get all suggested schedules from database, if the table is empty then
+     * throw an exception.
+     * @return List of the suggested schedules founded in the database.
+     * @exception EmptyTableException When the table have not records.
+     */
+    @Override
+    public List<SuggestedSchedule> getAllSuggestedSchedule() {
+        List<SuggestedSchedule> suggestedSchedules = suggestedScheduleRepository.findAll();
+        if (suggestedSchedules.isEmpty()) throw new EmptyTableException(SuggestedSchedule.class);
+        return suggestedSchedules;
+    }
+
+    /**
+     * Create or update a suggested schedule in the database, if the schedule is
+     * not saved then throw an exception.
+     * @param suggestedSchedule The suggested schedule that will be saved.
+     * @return The saved suggested schedule
+     * @exception SaveRecordFailException When the record couldn't been saved.
+     */
+    @Override
+    public SuggestedSchedule saveSuggestedSchedule(SuggestedSchedule suggestedSchedule) {
+        SuggestedSchedule savedSuggestedSchedule = suggestedScheduleRepository.save(suggestedSchedule);
+        if (savedSuggestedSchedule.getId() == null) throw new SaveRecordFailException(SuggestedSchedule.class);
+        return savedSuggestedSchedule;
     }
 
     /**

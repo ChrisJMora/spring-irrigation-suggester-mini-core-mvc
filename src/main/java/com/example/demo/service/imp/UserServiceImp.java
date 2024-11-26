@@ -25,7 +25,7 @@ public class UserServiceImp implements UserService {
             details.put("username", "The username already exists ");
         }
         if (UserEmailIsValid(user.getEmail())) {
-            details.put("email", "The email aready exists");
+            details.put("email", "The email already exists");
         }
         if (details.isEmpty()) {
             user.setPassword(AuthenticationUtil.hashPassword(user.getPassword()));

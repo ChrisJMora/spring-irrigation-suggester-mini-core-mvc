@@ -1,8 +1,10 @@
 package com.example.demo.service;
 
+import com.example.demo.exception.EmptyFilterException;
 import com.example.demo.exception.EmptyRecordException;
 import com.example.demo.exception.EmptyTableException;
 import com.example.demo.exception.SaveRecordFailException;
+import com.example.demo.model.agriculture.Crop;
 import com.example.demo.model.agriculture.Sensor;
 import com.example.demo.model.agriculture.SensorRecord;
 
@@ -16,6 +18,15 @@ public interface SensorService {
      * @exception EmptyTableException When the table have not records.
      */
     List<Sensor> getAllSensors();
+
+    /**
+     * Filter all sensors by crop.
+     * @param crop Crop by which the sensor list is filtered.
+     * @return List of sensors filtered.
+     * @exception EmptyFilterException When after applying the filter, the
+     * table have not records.
+     */
+    List<Sensor> getAllSensorsByCrop(Crop crop);
 
     /**
      * Get all records of a sensor from database, if the table is empty then

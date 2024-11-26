@@ -17,7 +17,7 @@ public class ScheduleSuggestion {
     @Autowired
     private CropService cropService;
     @Autowired
-    private SuggestedScheduleService suggestedScheduleService;
+    private ScheduleService scheduleService;
     @Autowired
     private SensorService sensorService;
     @Autowired
@@ -32,7 +32,7 @@ public class ScheduleSuggestion {
                 // ---------- CASE 1 ----------
                 Soil soil = crop.getSoil();
                 // Get the total retained water in the crops
-                List<Sensor> sensors = crop.getSensors();
+                List<Sensor> sensors = sensorService.getAllSensorsByCrop(crop);
                 float waterRetained = getHumidityPercentageAverage(sensors)/100 * soil.getWaterRetention()/100 * crop.getRootHeight() * 1000;
                 // If the retained water is not sufficient then try with forecast
                 if (waterRetained > crop.getWaterRequired()) continue;
@@ -48,7 +48,7 @@ public class ScheduleSuggestion {
                 // Calculate the total time needed by the sprinklers to fill the deficit
                 LocalTime irrigationTime = calculateIrrigationTime(deficit);
                 SuggestedSchedule schedule = new SuggestedSchedule(irrigationTime, crop);
-                suggestedScheduleService.saveSuggestedSchedule(schedule);
+                scheduleService.saveSuggestedSchedule(schedule);
             }
         } catch (RuntimeException ex) {
             ex.printStackTrace();

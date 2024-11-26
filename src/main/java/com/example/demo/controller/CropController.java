@@ -5,6 +5,7 @@ import com.example.demo.model.httpResponse.ApiResult;
 import com.example.demo.model.httpResponse.Error;
 import com.example.demo.model.httpResponse.WrappedEntity;
 import com.example.demo.service.CropService;
+import com.example.demo.utils.mapper.CropMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,33 +22,17 @@ public class CropController {
     @Autowired
     private CropService cropService;
 
+    @Autowired
+    private CropMapper cropMapper;
+
     @PreAuthorize("hasRole('ADMINISTRATOR') Or hasRole('SUPERVISOR')")
     @GetMapping("/all")
     public ResponseEntity<ApiResult> getAllCrops() {
         try {
-            return ResponseEntity.status(HttpStatus.FOUND)
-                    .body(new WrappedEntity<>(cropService.getAllCrops()));
+            List<Crop> crops = cropService.getAllCrops();
+            return ResponseEntity.status(HttpStatus.FOUND).body(new WrappedEntity<>(cropMapper.toDtoList(crops)));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new Error(e.getMessage()));
-        }
-    }
-
-    @PreAuthorize("hasRole('ADMINISTRATOR')")
-    @GetMapping("/add/test")
-    public ResponseEntity<ApiResult> addCrop() {
-        try {
-            Crop duplicate = cropService.getAllCrops().getFirst();
-            Crop cropTest = new Crop();
-            cropTest.setName("NUEVO CULTIVO");
-            cropTest.setWaterRequired(100);
-            cropTest.setLocation(duplicate.getLocation());
-            cropTest.setSoil(duplicate.getSoil());
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(cropService.saveCrop(cropTest));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new Error(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Error(e.getMessage()));
         }
     }
 }

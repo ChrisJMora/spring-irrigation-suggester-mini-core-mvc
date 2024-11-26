@@ -1,8 +1,10 @@
 package com.example.demo.service.imp;
 
+import com.example.demo.exception.EmptyFilterException;
 import com.example.demo.exception.EmptyRecordException;
 import com.example.demo.exception.EmptyTableException;
 import com.example.demo.exception.SaveRecordFailException;
+import com.example.demo.model.agriculture.Crop;
 import com.example.demo.model.agriculture.Forecast;
 import com.example.demo.model.agriculture.Sensor;
 import com.example.demo.model.agriculture.SensorRecord;
@@ -34,6 +36,20 @@ public class SensorServiceImp implements SensorService {
     public List<Sensor> getAllSensors() {
         List<Sensor> sensors = sensorRepository.findAll();
         if (sensors.isEmpty()) throw new EmptyTableException(Sensor.class);
+        return sensors;
+    }
+
+    /**
+     * Filter all sensors by crop.
+     * @param crop Crop by which the sensor list is filtered.
+     * @return List of sensors filtered.
+     * @exception EmptyFilterException When after applying the filter, the
+     * table have not records.
+     */
+    @Override
+    public List<Sensor> getAllSensorsByCrop(Crop crop) {
+        List<Sensor> sensors = sensorRepository.findByCrop(crop);
+        if (sensors.isEmpty()) throw new EmptyFilterException(Sensor.class, Crop.class);
         return sensors;
     }
 
