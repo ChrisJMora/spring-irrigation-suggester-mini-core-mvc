@@ -30,7 +30,7 @@ public class ForecastEmulator {
         Crop crop;
         try {
             crop = cropService.getCropByLocation(todayForecast.getLocation());
-            irrigationScheduleManager.manageIrrigationScheduleForCrop(crop, todayForecast);
+            irrigationScheduleManager.manageIrrigationScheduleForCrop(crop);
         } catch (EmptyRecordException ex) {
             log.warn("There are any crops that match the forecast location");
             irrigationScheduleManager.manageIrrigationScheduleForAllCrops();

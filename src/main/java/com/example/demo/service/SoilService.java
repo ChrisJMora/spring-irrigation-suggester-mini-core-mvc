@@ -1,3 +1,7 @@
+/**
+ * Implementation service for managing soil data.
+ * This service provides methods to perform operations related to soils in the database.
+ */
 package com.example.demo.service;
 
 import com.example.demo.exception.EmptyTableException;
@@ -8,10 +12,20 @@ import java.util.List;
 
 public interface SoilService {
     /**
-     * Get all soils from database, if the table is empty then throw an
-     * exception.
-     * @return List of the soils founded in the database.
-     * @exception EmptyTableException When the table have not records.
+     * Retrieves all soils from the database.
+     * If the table is empty, an exception is thrown.
+     *
+     * @return A list of soils found in the database.
+     * @throws EmptyTableException When the soils table has no records.
      */
     List<Soil> getAllSoils();
+
+    /**
+     * Retrieves a random soil from the database.
+     * If the table is empty, an exception is thrown.
+     *
+     * @return A random soil from the database.
+     * @throws EmptyTableException When the soils table has no records.
+     */
+    Soil getRandomSoil();
 }

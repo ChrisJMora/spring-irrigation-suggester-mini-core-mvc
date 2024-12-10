@@ -48,7 +48,7 @@ public class WaterCalculator {
         // Retrieve all sprinklers and calculate the total flow rate
         List<Sprinkler> sprinklers = sprinklerService.getAllSprinklers();
         for (Sprinkler sprinkler : sprinklers) {
-            totalFlowRate += sprinkler.getCaudal();
+            totalFlowRate += sprinkler.getFlowRate();
         }
         // Check if the total flow rate is valid
         if (totalFlowRate <= 0) {
@@ -116,7 +116,7 @@ public class WaterCalculator {
         List<Sprinkler> sprinklers = sprinklerService.getAllSprinklers();
         // Calculate the total flow rate from all sprinklers
         for (Sprinkler sprinkler : sprinklers) {
-            totalFlowRate += sprinkler.getCaudal();
+            totalFlowRate += sprinkler.getFlowRate();
         }
         // Calculate the total time needed for irrigation in seconds
         long seconds = Math.round(waterRequired / totalFlowRate);

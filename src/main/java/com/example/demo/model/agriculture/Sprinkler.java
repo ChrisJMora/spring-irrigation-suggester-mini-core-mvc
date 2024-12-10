@@ -23,7 +23,7 @@ public class Sprinkler {
     @Column(name = "sprinkler_type_irrigation")
     private IrrigationType irrigationType;
     @Column(name = "sprinkler_caudal")
-    private float caudal;
+    private float flowRate;
     @Convert(converter = SprinklerStatusConverter.class)
     @Column(name = "sprinkler_status")
     private SprinklerStatus status;

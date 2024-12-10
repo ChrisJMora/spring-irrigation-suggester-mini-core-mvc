@@ -7,6 +7,7 @@ import com.example.demo.model.agriculture.Crop;
 import com.example.demo.model.agriculture.Forecast;
 import com.example.demo.model.agriculture.SuggestedSchedule;
 import com.example.demo.service.CropService;
+import com.example.demo.service.ForecastService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -27,7 +28,7 @@ public class IrrigationScheduleManager {
     @Autowired
     private IrrigationScheduleSuggester irrigationScheduleSuggester;
     @Autowired
-    private ForecastEmulator forecastEmulator;
+    private ForecastService forecastService;
 
     @Scheduled(cron = "0 0 0 * * ?") // 12:00 AM
     public void cancelOutdatedSuggestedSchedules() {
@@ -48,17 +49,16 @@ public class IrrigationScheduleManager {
 
     @Scheduled(cron = "0 0 0 * * ?") // 12:00 AM
     public void manageIrrigationScheduleForAllCrops() {
-        Forecast todayForecast = forecastEmulator.getOrCreateTodayForecast();
         try {
             for (Crop crop : cropService.getAllCrops()) {
-                manageIrrigationScheduleForCrop(crop, todayForecast);
+                manageIrrigationScheduleForCrop(crop);
             }
         } catch (EmptyTableException ex) {
             log.error("There are any crops for suggest a irrigation schedule.", ex);
         }
     }
 
-    public void manageIrrigationScheduleForCrop(Crop crop, Forecast todayForecast) {
+    public void manageIrrigationScheduleForCrop(Crop crop) {
         if (irrigationScheduleValidator.validateSchedulesIrrigation(crop)) {
             log.info("All schedules for crop id: {} met its water needs", crop.getId());
             return;
@@ -67,6 +67,7 @@ public class IrrigationScheduleManager {
             log.info("The suggested irrigation schedule for crop id: {} meets its water needs.", crop.getId());
             return;
         }
+        Forecast todayForecast = forecastService.getForecastFromToday();
         float waterDeficit = crop.getWaterRequired() - irrigationScheduleValidator.getTotalIrrigatedWater();
         if (waterDeficit > 0) {
             irrigationScheduleSuggester.suggestIrrigationScheduleBasedOnConditions(crop, todayForecast);

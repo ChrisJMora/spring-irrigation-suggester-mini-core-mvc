@@ -16,6 +16,7 @@ public class CropMapperImp implements CropMapper {
         if (crop == null) return null;
 
         CropDTO cropDTO = new CropDTO();
+        cropDTO.setId(crop.getId());
         cropDTO.setName(crop.getName());
         cropDTO.setRootHeight(crop.getRootHeight());
         cropDTO.setWaterRequired(crop.getWaterRequired());
@@ -28,6 +29,7 @@ public class CropMapperImp implements CropMapper {
         if (cropDTO == null) return null;
 
         Crop crop = new Crop();
+        crop.setId(cropDTO.getId());
         crop.setName(cropDTO.getName());
         crop.setRootHeight(cropDTO.getRootHeight());
         crop.setWaterRequired(cropDTO.getWaterRequired());
@@ -47,11 +49,11 @@ public class CropMapperImp implements CropMapper {
     }
 
     @Override
-    public List<Crop> toEntityList(List<CropDTO> cropDTOs) {
-        if (cropDTOs == null) return null;
+    public List<Crop> toEntityList(List<CropDTO> cropRespons) {
+        if (cropRespons == null) return null;
 
-        List<Crop> list = new ArrayList<>( cropDTOs.size() );
-        for (CropDTO cropDTO : cropDTOs) {
+        List<Crop> list = new ArrayList<>( cropRespons.size() );
+        for (CropDTO cropDTO : cropRespons) {
             list.add( toEntity(cropDTO));
         }
         return list;

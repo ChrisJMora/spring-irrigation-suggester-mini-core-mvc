@@ -1,31 +1,52 @@
+/**
+ * Implementation service for managing crops.
+ * This service provides methods to perform CRUD operations on crops in the database.
+ */
 package com.example.demo.service;
 
+import com.example.demo.exception.EmptyRecordException;
 import com.example.demo.exception.EmptyTableException;
 import com.example.demo.exception.SaveRecordFailException;
 import com.example.demo.model.agriculture.Crop;
 import com.example.demo.model.agriculture.Location;
-import com.example.demo.model.httpResponse.WrappedEntity;
 
 import java.util.List;
 
 public interface CropService {
     /**
-     * Get all crops from database, if the table is empty then throw an
-     * exception.
-     * @return List of the crops founded in the database.
-     * @exception EmptyTableException When the table have not records.
+     * Retrieves all crops from the database.
+     * If the table is empty, an exception is thrown.
+     *
+     * @return A list of crops found in the database.
+     * @throws EmptyTableException When the table has no records.
      */
     List<Crop> getAllCrops();
 
+    /**
+     * Retrieves a crop by its ID.
+     *
+     * @param id The ID of the crop to retrieve.
+     * @return Crop The crop found.
+     * @throws EmptyRecordException When no crop is found with the provided ID.
+     */
     Crop getCropById(Long id);
 
+    /**
+     * Retrieves a crop by its location.
+     *
+     * @param location The location of the crop to retrieve.
+     * @return Crop The crop found.
+     * @throws EmptyRecordException When no crop is found at the provided location.
+     */
     Crop getCropByLocation(Location location);
 
     /**
-     * Create or update a crop in the database, if the crop is not
-     * saved then throw an exception.
-     * @param crop The crop that will be saved.
-     * @exception SaveRecordFailException When the record couldn't been saved.
+     * Creates or updates a crop in the database.
+     * If the crop is not saved successfully, an exception is thrown.
+     *
+     * @param crop The crop to be saved.
+     * @return Crop The saved crop.
+     * @throws SaveRecordFailException When the record could not be saved.
      */
     public Crop saveCrop(Crop crop);
 }

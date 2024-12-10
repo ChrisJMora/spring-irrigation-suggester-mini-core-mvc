@@ -1,10 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.ScheduleDTO;
-import com.example.demo.model.agriculture.Schedule;
-import com.example.demo.model.agriculture.ScheduleStatus;
-import com.example.demo.model.agriculture.SuggestedSchedule;
-import com.example.demo.model.agriculture.SuggestedScheduleStatus;
+import com.example.demo.model.agriculture.*;
 import com.example.demo.model.httpResponse.ApiResult;
 import com.example.demo.model.httpResponse.Error;
 import com.example.demo.model.httpResponse.WrappedEntity;
@@ -84,9 +81,9 @@ public class ScheduleController {
             Schedule schedule = scheduleService.getScheduleById(id);
             schedule.setStatus(ScheduleStatus.CANCELED);
             schedule.setUpdatedAt(LocalDateTime.now());
-            Schedule saved = scheduleService.saveSchedule(schedule);
+            Schedule savedSchedule = scheduleService.saveSchedule(schedule);
             irrigationScheduleManager.manageIrrigationScheduleForAllCrops();
-            return ResponseEntity.status(HttpStatus.OK).body(new WrappedEntity<>(scheduleMapper.toDto(saved)));
+            return ResponseEntity.status(HttpStatus.OK).body(new WrappedEntity<>(scheduleMapper.toDto(savedSchedule)));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new Error(e.getMessage()));
@@ -100,6 +97,7 @@ public class ScheduleController {
             Schedule schedule = scheduleMapper.toEntity(scheduleDTO);
             schedule.setDate(LocalDate.now());
             Schedule saved = scheduleService.saveSchedule(schedule);
+            irrigationScheduleManager.manageIrrigationScheduleForCrop(saved.getCrop());
             return ResponseEntity.status(HttpStatus.CREATED).body(new WrappedEntity<>(scheduleMapper.toDto(saved)));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

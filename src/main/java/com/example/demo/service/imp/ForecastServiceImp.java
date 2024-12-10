@@ -1,3 +1,7 @@
+/**
+ * Implementation service for managing weather forecasts.
+ * This service provides methods to perform CRUD operations on forecasts in the database.
+ */
 package com.example.demo.service.imp;
 
 import com.example.demo.exception.EmptyRecordException;
@@ -20,10 +24,11 @@ public class ForecastServiceImp implements ForecastService {
     private ForecastRepository forecastRepository;
 
     /**
-     * Get all forecasts from database, if the table is empty then throw an
-     * exception.
-     * @return List of the forecasts founded in the database.
-     * @exception EmptyTableException When the table have not records.
+     * Retrieves all forecasts from the database.
+     * If the table is empty, an exception is thrown.
+     *
+     * @return A list of forecasts found in the database.
+     * @throws EmptyTableException When the forecasts table has no records.
      */
     @Override
     public List<Forecast> getAllForecasts() {
@@ -33,10 +38,11 @@ public class ForecastServiceImp implements ForecastService {
     }
 
     /**
-     * Get the forecast from today, if the record is empty then throw an
-     * exception.
-     * @return The forecast whose date coincides with today.
-     * @exception EmptyRecordException When the record is empty.
+     * Retrieves the forecast for today.
+     * If there is no forecast for today, an exception is thrown.
+     *
+     * @return The forecast for today's date.
+     * @throws EmptyRecordException When no forecast is found for today.
      */
     @Override
     public Forecast getForecastFromToday() {
@@ -47,10 +53,12 @@ public class ForecastServiceImp implements ForecastService {
     }
 
     /**
-     * Create or update a forecast in the database, if the forecast is not
-     * saved then throw an exception.
-     * @param forecast The forecast that will be saved.
-     * @exception SaveRecordFailException When the record couldn't been saved.
+     * Creates or updates a forecast in the database.
+     * If the forecast is not saved successfully, an exception is thrown.
+     *
+     * @param forecast The forecast to be saved.
+     * @return The saved forecast.
+     * @throws SaveRecordFailException When the forecast could not be saved.
      */
     @Override
     public Forecast saveForecast(Forecast forecast) {

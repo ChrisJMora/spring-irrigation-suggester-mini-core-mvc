@@ -1,9 +1,12 @@
+/**
+ * Implementation service for managing locations.
+ * This service provides methods to perform CRUD operations on locations in the database.
+ */
 package com.example.demo.service.imp;
 
-import com.example.demo.dto.LocationDTO;
 import com.example.demo.exception.EmptyTableException;
+import com.example.demo.exception.SaveRecordFailException;
 import com.example.demo.model.agriculture.Location;
-import com.example.demo.model.httpResponse.WrappedEntity;
 import com.example.demo.persistence.LocationRepository;
 import com.example.demo.service.LocationService;
 import com.example.demo.utils.mapper.LocationMapper;
@@ -18,15 +21,17 @@ public class LocationServiceImp implements LocationService {
 
     @Autowired
     private LocationRepository locationRepository;
-
     @Autowired
     private LocationMapper locationMapper;
 
+    private final Random random = new Random();
+
     /**
-     * Get all locations from database, if the table is empty then throw an
-     * exception.
-     * @return List of the locations founded in the database.
-     * @exception EmptyTableException When the table have not records.
+     * Retrieves all locations from the database.
+     * If the table is empty, an exception is thrown.
+     *
+     * @return A list of locations found in the database.
+     * @throws EmptyTableException When the locations table has no records.
      */
     @Override
     public List<Location> getAllLocations() {
@@ -36,16 +41,48 @@ public class LocationServiceImp implements LocationService {
     }
 
     /**
-     * Get a random location from the database, if the table is empty then
-     * thrown an exception.
-     * @return Random location from the database.
-     * @exception EmptyTableException When the table have not records.
+     * Retrieves a random location from the database.
+     * If the table is empty, an exception is thrown.
+     *
+     * @return A random location from the database.
+     * @throws EmptyTableException When the locations table has no records.
      */
     @Override
     public Location getRandomLocation() {
         List<Location> locations = getAllLocations();
-        Random random = new Random();
         int randomIndex = random.nextInt(locations.size());
         return locations.get(randomIndex);
+    }
+
+    /**
+     * Creates a random location with random latitude and longitude values.
+     * The new location is then saved to the database.
+     *
+     * @return The newly created random location.
+     * @throws SaveRecordFailException When the location could not be saved.
+     */
+    @Override
+    public Location createRandomLocation() {
+        Location location = new Location();
+        float latitude = -90 + random.nextFloat() * 180;
+        location.setLatitude(latitude);
+        float longitude = -180 + random.nextFloat() * 360;
+        location.setLongitude(longitude);
+        return saveLocation(location);
+    }
+
+    /**
+     * Saves a location to the database.
+     * If the location is not saved successfully, an exception is thrown.
+     *
+     * @param location The location to be saved.
+     * @return The saved location.
+     * @throws SaveRecordFailException When the location could not be saved.
+     */
+    @Override
+    public Location saveLocation(Location location) {
+        Location savedLocation = locationRepository.save(location);
+        if (savedLocation.getId() == null) throw new SaveRecordFailException(Location.class);
+        return savedLocation;
     }
 }
