@@ -53,8 +53,9 @@ public class ForecastServiceImp implements ForecastService {
      * @exception SaveRecordFailException When the record couldn't been saved.
      */
     @Override
-    public void saveForecast(Forecast forecast) {
+    public Forecast saveForecast(Forecast forecast) {
         Forecast savedForecast = forecastRepository.save(forecast);
         if (savedForecast.getId() == null) throw new SaveRecordFailException(Forecast.class);
+        return savedForecast;
     }
 }

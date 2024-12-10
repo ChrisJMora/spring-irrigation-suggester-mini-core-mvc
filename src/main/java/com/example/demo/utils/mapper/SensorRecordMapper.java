@@ -7,9 +7,8 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
 public interface SensorRecordMapper {
-    SensorRecordDTO toDto(SensorRecord sensorRecord);
+    SensorRecordDTO toDto(SensorRecord sensorRecorde);
     SensorRecord toEntity(SensorRecordDTO sensorRecordDTO);
     List<SensorRecordDTO> toDtoList(List<SensorRecord> sensorRecords);
     List<SensorRecord> toEntityList(List<SensorRecordDTO> sensorRecordDTOs);

@@ -4,12 +4,19 @@ import com.example.demo.model.agriculture.ScheduleStatus;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter @Setter
 public class ScheduleDTO {
-    private LocalDateTime date;
+    private Long id;
+    private LocalDate date;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private ScheduleStatus status;
+    private Long cropId;
+    private String cropName;
 }

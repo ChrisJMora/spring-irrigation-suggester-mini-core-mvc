@@ -13,7 +13,7 @@ import java.time.LocalTime;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-public class ScheduleSuggestionTest {
+public class IrrigationScheduleSuggestionTest {
     @Autowired
     private ScheduleService scheduleService;
 
@@ -23,7 +23,7 @@ public class ScheduleSuggestionTest {
     @Test
     public void testSaveSuggestedSchedule() {
         // Recuperar un cultivo (asegúrate de que existan cultivos en la BD para esta prueba)
-        Crop crop = cropService.getAllCrops().get(0);
+        Crop crop = cropService.getAllCrops().getFirst();
         // Crear un nuevo SuggestedSchedule
         SuggestedSchedule schedule = new SuggestedSchedule(LocalTime.of(6, 0), crop);
         // Guardar el registro y verificar que se guardó

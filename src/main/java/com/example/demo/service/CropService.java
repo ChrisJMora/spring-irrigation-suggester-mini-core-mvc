@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.exception.EmptyTableException;
 import com.example.demo.exception.SaveRecordFailException;
 import com.example.demo.model.agriculture.Crop;
+import com.example.demo.model.agriculture.Location;
 import com.example.demo.model.httpResponse.WrappedEntity;
 
 import java.util.List;
@@ -15,6 +16,10 @@ public interface CropService {
      * @exception EmptyTableException When the table have not records.
      */
     List<Crop> getAllCrops();
+
+    Crop getCropById(Long id);
+
+    Crop getCropByLocation(Location location);
 
     /**
      * Create or update a crop in the database, if the crop is not

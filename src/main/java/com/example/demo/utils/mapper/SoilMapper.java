@@ -8,7 +8,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface SoilMapper {
-    SoilDTO toDTO(Soil soil);
+    SoilDTO toDTO(Soil soile);
     Soil toEntity(SoilDTO soilDTO);
     List<SoilDTO> toDtoList(List<Soil> soils);
     List<Soil> toEntityList(List<SoilDTO> soilDTOs);

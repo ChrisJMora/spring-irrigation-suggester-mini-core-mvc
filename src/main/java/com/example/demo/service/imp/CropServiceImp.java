@@ -1,16 +1,17 @@
 package com.example.demo.service.imp;
 
+import com.example.demo.exception.EmptyRecordException;
 import com.example.demo.exception.EmptyTableException;
 import com.example.demo.exception.SaveRecordFailException;
 import com.example.demo.model.agriculture.Crop;
-import com.example.demo.model.agriculture.Forecast;
-import com.example.demo.model.httpResponse.WrappedEntity;
+import com.example.demo.model.agriculture.Location;
 import com.example.demo.persistence.CropRepository;
 import com.example.demo.service.CropService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CropServiceImp implements CropService {
@@ -29,6 +30,20 @@ public class CropServiceImp implements CropService {
         List<Crop> crops = cropRepository.findAll();
         if (crops.isEmpty()) throw new EmptyTableException(Crop.class);
         return cropRepository.findAll();
+    }
+
+    @Override
+    public Crop getCropById(Long id) {
+        Optional<Crop> crop = cropRepository.findById(id);
+        if (crop.isEmpty()) throw new EmptyRecordException(Crop.class);
+        return crop.get();
+    }
+
+    @Override
+    public Crop getCropByLocation(Location location) {
+        Optional<Crop> crop = cropRepository.findByLocation(location);
+        if (crop.isEmpty()) throw new EmptyRecordException(Crop.class);
+        return crop.get();
     }
 
     /**

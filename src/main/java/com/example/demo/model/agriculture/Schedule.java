@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,7 +23,11 @@ public class Schedule {
     private Long id;
 
     @Column(name = "schedule_date")
-    private LocalDateTime date;
+    private LocalDate date;
+    @Column(name = "schedule_start")
+    private LocalTime startTime;
+    @Column(name = "schedule_end")
+    private LocalTime endTime;
     @Column(name = "schedule_created_at")
     private LocalDateTime createdAt;
     @Column(name = "schedule_updated_at")

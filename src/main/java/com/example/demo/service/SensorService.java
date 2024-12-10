@@ -51,5 +51,7 @@ public interface SensorService {
      * @param sensorRecord The record that will be saved.
      * @exception SaveRecordFailException When the record couldn't been saved.
      */
-    void saveSensorRecord(SensorRecord sensorRecord);
+    SensorRecord saveSensorRecord(SensorRecord sensorRecord);
+
+    SensorRecord createRandomRecord(Sensor sensor);
 }

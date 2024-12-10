@@ -30,7 +30,18 @@ public class CropController {
     public ResponseEntity<ApiResult> getAllCrops() {
         try {
             List<Crop> crops = cropService.getAllCrops();
-            return ResponseEntity.status(HttpStatus.FOUND).body(new WrappedEntity<>(cropMapper.toDtoList(crops)));
+            return ResponseEntity.status(HttpStatus.OK).body(new WrappedEntity<>(cropMapper.toDtoList(crops)));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Error(e.getMessage()));
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @GetMapping("/create")
+    public ResponseEntity<ApiResult> createCrop() {
+        try {
+            List<Crop> crops = cropService.getAllCrops();
+            return ResponseEntity.status(HttpStatus.OK).body(new WrappedEntity<>(cropMapper.toDtoList(crops)));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Error(e.getMessage()));
         }

@@ -21,6 +21,8 @@ public class Forecast {
     @Column(name = "forecast_id")
     private Long id;
 
+    @Column(name = "forecast_probability")
+    private float probability;
     @Column(name = "forecast_precipitation")
     private short precipitation;
     @Column(name = "forecast_date")

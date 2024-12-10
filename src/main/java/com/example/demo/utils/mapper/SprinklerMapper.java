@@ -8,7 +8,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface SprinklerMapper {
-    SprinklerDTO toDTO(Sprinkler sprinkler);
+    SprinklerDTO toDTO(Sprinkler sprinklere);
     Sprinkler toEntity(SprinklerDTO sprinklerDTO);
     List<SprinklerDTO> toDtoList(List<Sprinkler> sprinklers);
     List<Sprinkler> toEntityList(List<SprinklerDTO> sprinklerDTOs);

@@ -7,7 +7,6 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
 public interface CropMapper {
     CropDTO toDTO(Crop crop);
     Crop toEntity(CropDTO cropDTO);

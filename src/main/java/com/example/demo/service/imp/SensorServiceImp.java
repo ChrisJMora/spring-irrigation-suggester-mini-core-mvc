@@ -11,9 +11,13 @@ import com.example.demo.model.agriculture.SensorRecord;
 import com.example.demo.persistence.SensorRecordRepository;
 import com.example.demo.persistence.SensorRepository;
 import com.example.demo.service.SensorService;
+import com.example.demo.utils.statistics.NormalDistributionService;
+import jakarta.persistence.Transient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +29,9 @@ public class SensorServiceImp implements SensorService {
 
     @Autowired
     private SensorRecordRepository sensorRecordRepository;
+
+    @Autowired
+    private NormalDistributionService normalDistributionService;
 
     /**
      * Get all sensors from database, if the table is empty then throw an
@@ -87,8 +94,19 @@ public class SensorServiceImp implements SensorService {
      * @exception SaveRecordFailException When the record couldn't been saved.
      */
     @Override
-    public void saveSensorRecord(SensorRecord sensorRecord) {
+    public SensorRecord saveSensorRecord(SensorRecord sensorRecord) {
         SensorRecord savedRecord = sensorRecordRepository.save(sensorRecord);
         if (savedRecord.getId() == null) throw new SaveRecordFailException(SensorRecord.class);
+        return savedRecord;
+    }
+
+    @Override
+    public SensorRecord createRandomRecord(Sensor sensor) {
+        SensorRecord randomRecord = new SensorRecord();
+        randomRecord.setHumidity(normalDistributionService.generateNormal(0.6f, 0.15f));
+        randomRecord.setDate(LocalDate.now());
+        randomRecord.setTime(LocalTime.now());
+        randomRecord.setSensor(sensor);
+        return saveSensorRecord(randomRecord);
     }
 }

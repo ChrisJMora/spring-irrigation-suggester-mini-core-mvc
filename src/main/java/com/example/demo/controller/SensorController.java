@@ -33,7 +33,7 @@ public class SensorController {
     public ResponseEntity<ApiResult> getAllSensors() {
         try {
             List<SensorRecord> sensorRecords = sensorService.getAllRecords();
-            return ResponseEntity.status(HttpStatus.FOUND).body(new WrappedEntity<>(sensorRecordMapper.toDtoList(sensorRecords)));
+            return ResponseEntity.status(HttpStatus.OK).body(new WrappedEntity<>(sensorRecordMapper.toDtoList(sensorRecords)));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Error(e.getMessage()));
         }

@@ -9,8 +9,11 @@ import java.time.LocalTime;
 
 @Getter @Setter
 public class SuggestedScheduleDTO {
+    private Long id;
     private LocalTime delayTime;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private SuggestedScheduleStatus status;
+    private Long cropId;
+    private String cropName;
 }

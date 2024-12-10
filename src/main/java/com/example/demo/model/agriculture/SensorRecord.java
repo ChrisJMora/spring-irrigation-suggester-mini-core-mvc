@@ -1,10 +1,12 @@
 package com.example.demo.model.agriculture;
 
+import com.example.demo.utils.statistics.NormalDistributionService;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -31,11 +33,4 @@ public class SensorRecord {
     @ManyToOne
     @JoinColumn(name = "sensor_id", nullable = false)
     private Sensor sensor;
-
-    public SensorRecord(Sensor sensor) {
-        Random random = new Random();
-        humidity = random.nextFloat(0.1f,0.9f);
-        date = LocalDate.now(); time = LocalTime.now();
-        this.sensor = sensor;
-    }
 }

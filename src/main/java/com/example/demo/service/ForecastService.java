@@ -30,5 +30,5 @@ public interface ForecastService {
      * @param forecast The forecast that will be saved.
      * @exception SaveRecordFailException When the record couldn't been saved.
      */
-    void saveForecast(Forecast forecast);
+    Forecast saveForecast(Forecast forecast);
 }
