@@ -4,10 +4,7 @@
  */
 package com.example.demo.service;
 
-import com.example.demo.exception.EmptyFilterException;
-import com.example.demo.exception.EmptyRecordException;
-import com.example.demo.exception.EmptyTableException;
-import com.example.demo.exception.SaveRecordFailException;
+import com.example.demo.exception.*;
 import com.example.demo.model.agriculture.*;
 
 import java.time.LocalDate;
@@ -94,12 +91,18 @@ public interface ScheduleService {
     SuggestedSchedule saveSuggestedSchedule(SuggestedSchedule suggestedSchedule);
 
     /**
-     * Creates or updates a schedule in the database.
-     * If the schedule is not saved successfully, an exception is thrown.
+     * Saves a schedule to the database, creating a new record or updating an existing one.
+     * This method first validates the provided schedule to ensure it meets the necessary criteria,
+     * including that the start time is in the future and that there are no conflicts with existing schedules.
+     * If the validation fails, an appropriate exception is thrown.
+     * After validation, the schedule is saved to the database. If the save operation is unsuccessful
+     * a {@link SaveRecordFailException} is thrown.
      *
-     * @param schedule The schedule to be saved.
-     * @return The saved schedule.
-     * @throws SaveRecordFailException When the schedule could not be saved.
+     * @param schedule The schedule object to be saved.
+     * @return The saved schedule object.
+     * @throws FutureScheduleException If the schedule's start time is in the past.
+     * @throws ScheduleConflictException If the schedule conflicts with existing schedules for the same crop.
+     * @throws SaveRecordFailException If the schedule could not be saved to the database.
      */
     Schedule saveSchedule(Schedule schedule);
 }

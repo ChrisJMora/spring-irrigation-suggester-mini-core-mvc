@@ -51,7 +51,7 @@ public class CropController {
             return ResponseEntity.ok(new WrappedEntity<>(cropMapper.toDtoList(crops)));
         } catch (EmptyTableException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new Error("No crops found in the database: " + ex.getMessage()));
+                    .body(new Error(ex.getMessage()));
         } catch (Exception ex) {
             log.error("An error occurred while retrieving crops: ", ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -77,7 +77,7 @@ public class CropController {
                     .body(new Error(ex.getMessage()));
         } catch (SaveRecordFailException ex) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                    .body(new Error("Failed to save crop: " + ex.getMessage()));
+                    .body(new Error(ex.getMessage()));
         } catch (Exception ex) {
             log.error("An error occurred while updating the crop: ", ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -109,7 +109,7 @@ public class CropController {
                     .body(new WrappedEntity<>(cropMapper.toDTO(savedCrop)));
         } catch (SaveRecordFailException ex) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                    .body(new Error("Failed to save crop: " + ex.getMessage()));
+                    .body(new Error(ex.getMessage()));
         } catch (Exception ex) {
             log.error("An error occurred while adding the crop: ", ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.ScheduleDTO;
+import com.example.demo.exception.*;
 import com.example.demo.model.agriculture.*;
 import com.example.demo.model.httpResponse.ApiResult;
 import com.example.demo.model.httpResponse.Error;
@@ -11,6 +12,7 @@ import com.example.demo.tasks.IrrigationScheduleManager;
 import com.example.demo.tasks.IrrigationScheduleSuggester;
 import com.example.demo.utils.mapper.ScheduleMapper;
 import com.example.demo.utils.mapper.SuggestedScheduleMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/schedule")
@@ -41,10 +44,15 @@ public class ScheduleController {
     public ResponseEntity<ApiResult> getAllSchedules() {
         try {
             List<Schedule> schedules = scheduleService.getAllSchedules();
-            return ResponseEntity.status(HttpStatus.OK).body(new WrappedEntity<>(scheduleMapper.toDtoList(schedules)));
-        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new WrappedEntity<>(scheduleMapper.toDtoList(schedules)));
+        } catch (EmptyTableException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Error(ex.getMessage()));
+        } catch (Exception ex) {
+            log.error("An error occurred while retrieving schedules: ", ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new Error(e.getMessage()));
+                    .body(new Error("An unexpected error occurred."));
         }
     }
 
@@ -53,9 +61,15 @@ public class ScheduleController {
     public ResponseEntity<ApiResult> getAllSuggestedSchedule() {
         try {
             List<SuggestedSchedule> suggestedSchedules = scheduleService.getAllSuggestedSchedule();
-            return ResponseEntity.status(HttpStatus.OK).body(new WrappedEntity<>(suggestedScheduleMapper.toDtoList(suggestedSchedules)));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Error(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new WrappedEntity<>(suggestedScheduleMapper.toDtoList(suggestedSchedules)));
+        } catch (EmptyTableException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Error(ex.getMessage()));
+        } catch (Exception ex) {
+            log.error("An error occurred while retrieving suggested schedules: ", ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new Error("An unexpected error occurred."));
         }
     }
 
@@ -67,10 +81,18 @@ public class ScheduleController {
             schedule.setStatus(SuggestedScheduleStatus.ACCEPTED);
             schedule.setUpdatedAt(LocalDateTime.now());
             SuggestedSchedule saved = scheduleService.saveSuggestedSchedule(schedule);
-            return ResponseEntity.status(HttpStatus.OK).body(new WrappedEntity<>(suggestedScheduleMapper.toDTO(saved)));
-        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new WrappedEntity<>(suggestedScheduleMapper.toDTO(saved)));
+        } catch (EmptyRecordException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Error(ex.getMessage()));
+        } catch (SaveRecordFailException ex) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .body(new Error(ex.getMessage()));
+        } catch (Exception ex) {
+            log.error("An error occurred while accepting suggested schedule: ", ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new Error(e.getMessage()));
+                    .body(new Error("An unexpected error occurred."));
         }
     }
 
@@ -83,10 +105,18 @@ public class ScheduleController {
             schedule.setUpdatedAt(LocalDateTime.now());
             Schedule savedSchedule = scheduleService.saveSchedule(schedule);
             irrigationScheduleManager.manageIrrigationScheduleForAllCrops();
-            return ResponseEntity.status(HttpStatus.OK).body(new WrappedEntity<>(scheduleMapper.toDto(savedSchedule)));
-        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new WrappedEntity<>(scheduleMapper.toDto(savedSchedule)));
+        } catch (EmptyRecordException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Error(ex.getMessage()));
+        } catch (SaveRecordFailException ex) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .body(new Error(ex.getMessage()));
+        } catch (Exception ex) {
+            log.error("An error occurred while canceling the schedule: ", ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new Error(e.getMessage()));
+                    .body(new Error("An unexpected error occurred."));
         }
     }
 
@@ -96,12 +126,17 @@ public class ScheduleController {
         try {
             Schedule schedule = scheduleMapper.toEntity(scheduleDTO);
             schedule.setDate(LocalDate.now());
-            Schedule saved = scheduleService.saveSchedule(schedule);
-            irrigationScheduleManager.manageIrrigationScheduleForCrop(saved.getCrop());
-            return ResponseEntity.status(HttpStatus.CREATED).body(new WrappedEntity<>(scheduleMapper.toDto(saved)));
-        } catch (Exception e) {
+            Schedule savedSchedule = scheduleService.saveSchedule(schedule);
+            irrigationScheduleManager.manageIrrigationScheduleForCrop(savedSchedule.getCrop());
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new WrappedEntity<>(scheduleMapper.toDto(savedSchedule)));
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .body(new Error(ex.getMessage()));
+        } catch (Exception ex) {
+            log.error("An error occurred while adding the schedule: ", ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new Error(e.getMessage()));
+                    .body(new Error("An unexpected error occurred."));
         }
     }
 }

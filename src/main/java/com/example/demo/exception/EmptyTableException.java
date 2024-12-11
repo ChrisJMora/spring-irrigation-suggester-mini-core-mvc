@@ -4,6 +4,6 @@ import jakarta.persistence.Table;
 
 public class EmptyTableException extends RuntimeException {
     public EmptyTableException(Class<?> entityClass) {
-        super("No data available in the table: " + entityClass.getAnnotation(Table.class).name());
+        super("No " + entityClass.getAnnotation(Table.class).name() + " found in the database");
     }
 }
