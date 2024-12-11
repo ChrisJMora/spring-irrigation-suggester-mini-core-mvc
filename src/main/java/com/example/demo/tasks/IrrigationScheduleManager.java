@@ -41,24 +41,26 @@ public class IrrigationScheduleManager {
                 }
             }
         } catch (EmptyFilterException ex) {
-            log.error("There are no pending suggested schedules yet.", ex);
+            log.warn("There are no pending suggested schedules yet.", ex);
         } catch (SaveRecordFailException ex) {
             log.error("A problem occur updating a suggested schedule.", ex);
         }
     }
 
     @Scheduled(cron = "0 0 0 * * ?") // 12:00 AM
+//    @Scheduled(cron = "0 * * * * ?") // every minute
     public void manageIrrigationScheduleForAllCrops() {
         try {
             for (Crop crop : cropService.getAllCrops()) {
                 manageIrrigationScheduleForCrop(crop);
             }
         } catch (EmptyTableException ex) {
-            log.error("There are any crops for suggest a irrigation schedule.", ex);
+            log.error("There are no crops for which to suggest an irrigation schedule", ex);
         }
     }
 
     public void manageIrrigationScheduleForCrop(Crop crop) {
+        log.info("Starting irrigation management for crop id: {}", crop.getId());
         if (irrigationScheduleValidator.validateSchedulesIrrigation(crop)) {
             log.info("All schedules for crop id: {} met its water needs", crop.getId());
             return;
@@ -69,8 +71,13 @@ public class IrrigationScheduleManager {
         }
         Forecast todayForecast = forecastService.getForecastFromToday();
         float waterDeficit = crop.getWaterRequired() - irrigationScheduleValidator.getTotalIrrigatedWater();
+        log.info("Crop id: {} requires {} units of water, currently irrigated: {} units, water deficit: {} units.",
+                crop.getId(), crop.getWaterRequired(), irrigationScheduleValidator.getTotalIrrigatedWater(), waterDeficit);
         if (waterDeficit > 0) {
+            log.warn("Water deficit detected for crop id: {}. Suggesting irrigation schedule.", crop.getId());
             irrigationScheduleSuggester.suggestIrrigationScheduleBasedOnConditions(crop, todayForecast);
+        } else {
+            log.info("No water deficit for crop id: {}. No action needed.", crop.getId());
         }
     }
 }
