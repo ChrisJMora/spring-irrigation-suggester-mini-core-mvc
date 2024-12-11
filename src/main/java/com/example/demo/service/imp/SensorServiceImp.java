@@ -153,6 +153,8 @@ public class SensorServiceImp implements SensorService {
         for (int i = 0; i < quantity; i++) {
             Sensor sensor = new Sensor();
             sensor.setCrop(crop);
+            SensorRecord randomRecord = createRandomRecord(sensor);
+            sensor.getRecords().add(randomRecord);
             sensors.add(sensor);
         }
         return saveSensors(sensors);
