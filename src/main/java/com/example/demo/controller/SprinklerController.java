@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "https://irrigation-suggester-mini-core-service.onrender.com")
 @RestController
 @RequestMapping("/api/sprinkler")
 public class SprinklerController {

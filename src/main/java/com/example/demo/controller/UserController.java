@@ -14,7 +14,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.service.imp.UserServiceImp;
 
-@CrossOrigin(origins = "https://irrigation-suggester-mini-core-service.onrender.com")
 @RestController
 @RequestMapping("/api/user")
 public class UserController {

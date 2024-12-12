@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j
-@CrossOrigin(origins = "https://irrigation-suggester-mini-core-service.onrender.com")
 @RestController
 @RequestMapping("/api/forecast")
 public class ForecastController {
