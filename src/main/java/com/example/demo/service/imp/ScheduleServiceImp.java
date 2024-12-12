@@ -9,6 +9,7 @@ import com.example.demo.model.agriculture.*;
 import com.example.demo.persistence.ScheduleRepository;
 import com.example.demo.persistence.SuggestedScheduleRepository;
 import com.example.demo.service.ScheduleService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class ScheduleServiceImp implements ScheduleService {
 
@@ -149,21 +151,16 @@ public class ScheduleServiceImp implements ScheduleService {
 
     /**
      * Saves a schedule to the database, creating a new record or updating an existing one.
-     * This method first validates the provided schedule to ensure it meets the necessary criteria,
-     * including that the start time is in the future and that there are no conflicts with existing schedules.
-     * If the validation fails, an appropriate exception is thrown.
-     * After validation, the schedule is saved to the database. If the save operation is unsuccessful
+     * If the save operation is unsuccessful,
      * a {@link SaveRecordFailException} is thrown.
      *
      * @param schedule The schedule object to be saved.
-     * @return The saved schedule object.
-     * @throws FutureScheduleException If the schedule's start time is in the past.
-     * @throws ScheduleConflictException If the schedule conflicts with existing schedules for the same crop.
-     * @throws SaveRecordFailException If the schedule could not be saved to the database.
+     * @return The saved schedule object
+     * @throws SaveRecordFailException If the schedule could not be saved to
+     * the database.
      */
     @Override
     public Schedule saveSchedule(Schedule schedule) {
-        validateSchedule(schedule);
         Schedule savedSchedule = scheduleRepository.save(schedule);
         if (savedSchedule.getId() == null) {
             throw new SaveRecordFailException(Schedule.class);
@@ -172,11 +169,30 @@ public class ScheduleServiceImp implements ScheduleService {
     }
 
     /**
-     * Validates the given schedule to ensure it meets the necessary criteria.
+     * Adds a new schedule to the system after validating it.
+     * If the validation fails, an appropriate exception is thrown.
      *
-     * @param schedule the schedule to validate
-     * @throws FutureScheduleException if the schedule's start time is in the past
-     * @throws ScheduleConflictException if the schedule conflicts with existing schedules
+     * @param schedule The schedule object to be added.
+     * @return The saved schedule object.
+     * @throws FutureScheduleException If the schedule's start time is in the past.
+     * @throws ScheduleConflictException If the schedule conflicts with existing schedules for the same crop.
+     * @throws SaveRecordFailException If the schedule could not be saved to the database.
+     */
+    @Override
+    public Schedule addSchedule(Schedule schedule) {
+        validateSchedule(schedule);
+        return saveSchedule(schedule);
+    }
+
+    /**
+     * Validates the given schedule to ensure it meets the necessary criteria.
+     * This includes checking that the start time is in the future and that there are no conflicts
+     * with existing schedules for the same crop.
+     *
+     * @param schedule The schedule to validate.
+     * @throws FutureScheduleException If the schedule's start time is in the past, indicating that it cannot be scheduled.
+     * @throws ScheduleConflictException If the schedule conflicts with existing schedules for the same crop,
+     *                                   meaning the time overlaps with another schedule.
      */
     private void validateSchedule(Schedule schedule) {
         LocalDateTime startDateTime = schedule.getDate().atTime(schedule.getStartTime());
@@ -184,13 +200,18 @@ public class ScheduleServiceImp implements ScheduleService {
         if (startDateTime.isBefore(LocalDateTime.now())) {
             throw new FutureScheduleException();
         }
-        List<Schedule> schedules = getPendingSchedulesForToday(schedule.getCrop());
-        // Check for conflicts with existing schedules
-        for (Schedule existingSchedule : schedules) {
-            if (schedule.getStartTime().isBefore(existingSchedule.getEndTime()) &&
-                    schedule.getEndTime().isAfter(existingSchedule.getStartTime())) {
-                throw new ScheduleConflictException();
+        try {
+            List<Schedule> schedules = getPendingSchedulesForToday(schedule.getCrop());
+            // Check for conflicts with existing schedules
+            for (Schedule existingSchedule : schedules) {
+                if (existingSchedule.equals(schedule)) continue;
+                if (schedule.getStartTime().isBefore(existingSchedule.getEndTime()) &&
+                        schedule.getEndTime().isAfter(existingSchedule.getStartTime())) {
+                    throw new ScheduleConflictException();
+                }
             }
+        } catch (EmptyFilterException ex) {
+            log.info("There are no pending schedules for today yet.");
         }
     }
 
@@ -202,5 +223,32 @@ public class ScheduleServiceImp implements ScheduleService {
      */
     private List<Schedule> getPendingSchedulesForToday(Crop crop) {
         return getAllScheduleByCropAndStatusAndDate(crop, ScheduleStatus.PENDING, LocalDate.now());
+    }
+
+    @Override
+    public List<SuggestedSchedule> fetchPendingSuggestedSchedules() {
+        return getAllSuggestedScheduleByStatus(SuggestedScheduleStatus.PENDING);
+    }
+
+    @Override
+    public List<SuggestedSchedule> fetchPendingSuggestedSchedules(Crop crop) {
+        return getAllSuggestedScheduleByStatusAndCrop(SuggestedScheduleStatus.PENDING, crop);
+    }
+
+    @Override
+    public void cancelSuggestedSchedule(SuggestedSchedule schedule) {
+        schedule.setStatus(SuggestedScheduleStatus.CANCELED);
+        saveSuggestedSchedule(schedule);
+    }
+
+    @Override
+    public boolean isSuggestedScheduleOutdated(SuggestedSchedule schedule) {
+        LocalDate today = LocalDate.now();
+        return !schedule.getCreatedAt().toLocalDate().equals(today);
+    }
+
+    @Override
+    public boolean areCropAndForecastInSameLocation(Crop crop, Forecast forecast) {
+        return crop.getLocation().equals(forecast.getLocation());
     }
 }

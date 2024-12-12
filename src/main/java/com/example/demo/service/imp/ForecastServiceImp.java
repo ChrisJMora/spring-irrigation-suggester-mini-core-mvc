@@ -10,6 +10,8 @@ import com.example.demo.exception.SaveRecordFailException;
 import com.example.demo.model.agriculture.Forecast;
 import com.example.demo.persistence.ForecastRepository;
 import com.example.demo.service.ForecastService;
+import com.example.demo.service.LocationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +19,14 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class ForecastServiceImp implements ForecastService {
 
     @Autowired
     private ForecastRepository forecastRepository;
+    @Autowired
+    private LocationService locationService;
 
     /**
      * Retrieves all forecasts from the database.
@@ -65,5 +70,26 @@ public class ForecastServiceImp implements ForecastService {
         Forecast savedForecast = forecastRepository.save(forecast);
         if (savedForecast.getId() == null) throw new SaveRecordFailException(Forecast.class);
         return savedForecast;
+    }
+
+    private Forecast createForecastForToday() {
+        log.info("Creating a new forecast for today.");
+        Forecast todayForecast = new Forecast(locationService.getRandomLocation());
+        Forecast savedForecast = saveForecast(todayForecast);
+        log.info("New forecast created and saved: {}", savedForecast);
+        return savedForecast;
+    }
+
+    @Override
+    public Forecast getOrCreateTodayForecast() {
+        Forecast todayForecast;
+        try {
+            todayForecast = getForecastFromToday();
+            log.info("Retrieved today's forecast: {}", todayForecast);
+        } catch (EmptyRecordException ex) {
+            log.info("There is no forecast for today. Creating a new one.");
+            todayForecast = createForecastForToday();
+        }
+        return todayForecast;
     }
 }

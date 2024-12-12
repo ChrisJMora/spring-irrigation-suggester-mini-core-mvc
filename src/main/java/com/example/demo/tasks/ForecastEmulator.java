@@ -24,11 +24,10 @@ public class ForecastEmulator {
     @Autowired
     CropService cropService;
 
-     @Scheduled(cron = "0 0 0 * * ?") // 12:00 AM
-//    @Scheduled(cron = "0 * * * * ?") // every minute
+    @Scheduled(cron = "0 0 0 * * ?") // 12:00 AM
     public void updateIrrigationScheduleBasedOnTodayForecast() {
         log.info("Starting the update of irrigation schedule based on today's forecast.");
-        Forecast todayForecast = getOrCreateTodayForecast();
+        Forecast todayForecast = forecastService.getOrCreateTodayForecast();
         Crop crop;
         try {
             crop = cropService.getCropByLocation(todayForecast.getLocation());
@@ -38,25 +37,5 @@ public class ForecastEmulator {
             log.warn("There are no crops that match with forecast for today. Managing irrigation schedule for all crops.");
             irrigationScheduleManager.manageIrrigationScheduleForAllCrops();
         }
-    }
-
-    private Forecast createForecastForToday() {
-        log.info("Creating a new forecast for today.");
-        Forecast todayForecast = new Forecast(locationService.getRandomLocation());
-        Forecast savedForecast = forecastService.saveForecast(todayForecast);
-        log.info("New forecast created and saved: {}", savedForecast);
-        return savedForecast;
-    }
-
-    public Forecast getOrCreateTodayForecast() {
-        Forecast todayForecast;
-        try {
-            todayForecast = forecastService.getForecastFromToday();
-            log.info("Retrieved today's forecast: {}", todayForecast);
-        } catch (EmptyRecordException ex) {
-            log.info("There is no forecast for today. Creating a new one.");
-            todayForecast = createForecastForToday();
-        }
-        return todayForecast;
     }
 }

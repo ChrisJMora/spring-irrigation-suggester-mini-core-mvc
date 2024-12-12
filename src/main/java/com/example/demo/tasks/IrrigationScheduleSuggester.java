@@ -1,6 +1,7 @@
 package com.example.demo.tasks;
 
 import com.example.demo.model.agriculture.*;
+import com.example.demo.service.ScheduleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +13,12 @@ public class IrrigationScheduleSuggester {
     @Autowired
     private WaterCalculator waterCalculator;
     @Autowired
+    private ScheduleService scheduleService;
+    @Autowired
     private IrrigationScheduleService irrigationScheduleService;
 
     public void suggestIrrigationScheduleBasedOnConditions(Crop crop, Forecast todayForecast) {
-        if (irrigationScheduleService.areCropAndForecastInSameLocation(crop,todayForecast)) {
+        if (scheduleService.areCropAndForecastInSameLocation(crop, todayForecast)) {
             suggestIrrigationScheduleByForecast(crop, todayForecast);
         } else {
             suggestIrrigationScheduleByWaterRetention(crop);
@@ -33,13 +36,13 @@ public class IrrigationScheduleSuggester {
     }
 
     private void suggestIrrigationSchedule(Crop crop, float additionalWater) {
+        float waterFromSchedules = waterCalculator.calculateTotalIrrigationFromSchedules(crop);
         float waterRetained = waterCalculator.calculateWaterRetention(crop);
-        if (waterRetained < 0) return;
-
-        float totalWaterAvailable = waterRetained + additionalWater;
-        if (totalWaterAvailable < crop.getWaterRequired()) {
-            irrigationScheduleService.cancelPendingSuggestedSchedules(crop);
-            float deficit = crop.getWaterRequired() - totalWaterAvailable;
+        float totalWaterIrrigated = waterFromSchedules + waterRetained + additionalWater;
+        if (totalWaterIrrigated < crop.getWaterRequired()) {
+            float deficit = crop.getWaterRequired() - totalWaterIrrigated;
+            log.info("Crop id: {} requires {} units of water, currently irrigated: {} units, water deficit: {} units.",
+                    crop.getId(), crop.getWaterRequired(), totalWaterIrrigated, deficit);
             irrigationScheduleService.createIrrigationSchedule(crop, deficit);
         }
     }

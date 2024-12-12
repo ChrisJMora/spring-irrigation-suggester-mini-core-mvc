@@ -16,7 +16,7 @@ public class ScheduleDTO {
     private LocalTime endTime;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private ScheduleStatus status;
+    private String status;
     private Long cropId;
     private String cropName;
 }

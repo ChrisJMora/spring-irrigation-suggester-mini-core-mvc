@@ -1,6 +1,7 @@
 package com.example.demo.tasks;
 
 import com.example.demo.exception.EmptyFilterException;
+import com.example.demo.exception.EmptyRecordException;
 import com.example.demo.model.agriculture.*;
 import com.example.demo.service.ScheduleService;
 import com.example.demo.service.SensorService;
@@ -37,7 +38,7 @@ public class WaterCalculator {
             return waterRetention;
         } catch (EmptyFilterException ex) {
             log.error("Crop with id {} has no associated sensors.", crop.getId(), ex);
-            return -1; // Indicate that the calculation could not be performed
+            return 0; // Indicate that the calculation could not be performed
         }
     }
 
@@ -69,27 +70,35 @@ public class WaterCalculator {
     }
 
     private float calculateAverageHumidity(List<Sensor> sensors) {
-        float totalHumidity = 0;
-        for (Sensor sensor : sensors) {
-            // Get the most recent record from each sensor
-            SensorRecord recentRecord = sensorService.getMostRecentRecord(sensor);
-            totalHumidity += recentRecord.getHumidity();
+        try {
+            float totalHumidity = 0;
+            for (Sensor sensor : sensors) {
+                // Get the most recent record from each sensor
+                SensorRecord recentRecord = sensorService.getMostRecentRecord(sensor);
+                totalHumidity += recentRecord.getHumidity();
+            }
+            // Calculate the average humidity
+            float averageHumidity = totalHumidity / sensors.size();
+            log.info("Calculated average humidity from {} sensors: {}%", sensors.size(), averageHumidity);
+            return averageHumidity;
+        } catch (EmptyRecordException ex) {
+            return 0;
         }
-        // Calculate the average humidity
-        float averageHumidity = totalHumidity / sensors.size();
-        log.info("Calculated average humidity from {} sensors: {}%", sensors.size(), averageHumidity);
-        return averageHumidity;
     }
 
     public float calculateTotalIrrigationFromSchedules(Crop crop) {
-        // Fetch all pending schedules for the given crop
-        List<Schedule> schedules = scheduleService.getAllScheduleByCropAndStatusAndDate(crop, ScheduleStatus.PENDING, LocalDate.now());
-        float totalIrrigatedWater = 0;
-        for (Schedule schedule : schedules) {
-            LocalTime irrigationDuration = calculateIrrigationDuration(schedule.getStartTime(), schedule.getEndTime());
-            totalIrrigatedWater += calculateIrrigatedWaterVolume(irrigationDuration);
+        try {
+            // Fetch all pending schedules for the given crop
+            List<Schedule> schedules = scheduleService.getAllScheduleByCropAndStatusAndDate(crop, ScheduleStatus.PENDING, LocalDate.now());
+            float totalIrrigatedWater = 0;
+            for (Schedule schedule : schedules) {
+                LocalTime irrigationDuration = calculateIrrigationDuration(schedule.getStartTime(), schedule.getEndTime());
+                totalIrrigatedWater += calculateIrrigatedWaterVolume(irrigationDuration);
+            }
+            return totalIrrigatedWater;
+        } catch (EmptyFilterException ex) {
+            return 0;
         }
-        return totalIrrigatedWater;
     }
 
     public float calculateTotalIrrigationFromSuggestedSchedules(Crop crop) {

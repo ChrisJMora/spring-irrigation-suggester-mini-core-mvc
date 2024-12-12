@@ -92,17 +92,35 @@ public interface ScheduleService {
 
     /**
      * Saves a schedule to the database, creating a new record or updating an existing one.
-     * This method first validates the provided schedule to ensure it meets the necessary criteria,
-     * including that the start time is in the future and that there are no conflicts with existing schedules.
-     * If the validation fails, an appropriate exception is thrown.
-     * After validation, the schedule is saved to the database. If the save operation is unsuccessful
+     * If the save operation is unsuccessful,
      * a {@link SaveRecordFailException} is thrown.
      *
      * @param schedule The schedule object to be saved.
+     * @return The saved schedule object
+     * @throws SaveRecordFailException If the schedule could not be saved to
+     * the database.
+     */
+    Schedule saveSchedule(Schedule schedule);
+
+    /**
+     * Adds a new schedule to the system after validating it.
+     * If the validation fails, an appropriate exception is thrown.
+     *
+     * @param schedule The schedule object to be added.
      * @return The saved schedule object.
      * @throws FutureScheduleException If the schedule's start time is in the past.
      * @throws ScheduleConflictException If the schedule conflicts with existing schedules for the same crop.
      * @throws SaveRecordFailException If the schedule could not be saved to the database.
      */
-    Schedule saveSchedule(Schedule schedule);
+    public Schedule addSchedule(Schedule schedule);
+
+    List<SuggestedSchedule> fetchPendingSuggestedSchedules();
+
+    List<SuggestedSchedule> fetchPendingSuggestedSchedules(Crop crop);
+
+    void cancelSuggestedSchedule(SuggestedSchedule schedule);
+
+    boolean isSuggestedScheduleOutdated(SuggestedSchedule schedule);
+
+    boolean areCropAndForecastInSameLocation(Crop crop, Forecast forecast);
 }

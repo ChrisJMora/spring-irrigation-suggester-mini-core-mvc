@@ -3,6 +3,7 @@ package com.example.demo.utils.mapper.imp;
 import com.example.demo.dto.SuggestedScheduleDTO;
 import com.example.demo.model.agriculture.Crop;
 import com.example.demo.model.agriculture.SuggestedSchedule;
+import com.example.demo.model.agriculture.SuggestedScheduleStatus;
 import com.example.demo.service.CropService;
 import com.example.demo.utils.mapper.SuggestedScheduleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class SuggestedScheduleMapperImp implements SuggestedScheduleMapper {
         scheduleDTO.setDelayTime(schedule.getDelayTime());
         scheduleDTO.setCreatedAt(schedule.getCreatedAt());
         scheduleDTO.setUpdatedAt(schedule.getUpdatedAt());
-        scheduleDTO.setStatus(schedule.getStatus());
+        scheduleDTO.setStatus(schedule.getStatus().getDescription());
         scheduleDTO.setCropId(schedule.getCrop().getId());
         scheduleDTO.setCropName(schedule.getCrop().getName());
         return scheduleDTO;
@@ -39,7 +40,7 @@ public class SuggestedScheduleMapperImp implements SuggestedScheduleMapper {
         schedule.setDelayTime(scheduleDTO.getDelayTime());
         schedule.setCreatedAt(scheduleDTO.getCreatedAt());
         schedule.setUpdatedAt(scheduleDTO.getUpdatedAt());
-        schedule.setStatus(scheduleDTO.getStatus());
+        schedule.setStatus(SuggestedScheduleStatus.fromDescription(scheduleDTO.getStatus()));
         Crop crop = cropService.getCropById(schedule.getId());
         schedule.setCrop(crop);
         return schedule;

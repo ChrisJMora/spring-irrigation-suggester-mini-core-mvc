@@ -153,11 +153,11 @@ public class SensorServiceImp implements SensorService {
         for (int i = 0; i < quantity; i++) {
             Sensor sensor = new Sensor();
             sensor.setCrop(crop);
-            SensorRecord randomRecord = createRandomRecord(sensor);
-            sensor.getRecords().add(randomRecord);
-            sensors.add(sensor);
+            Sensor savedSensor = saveSensor(sensor);
+            createRandomRecord(sensor);
+            sensors.add(savedSensor);
         }
-        return saveSensors(sensors);
+        return sensors;
     }
 
     /**

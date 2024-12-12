@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.AddScheduleRequest;
 import com.example.demo.dto.ScheduleDTO;
+import com.example.demo.dto.UpdateScheduleRequest;
 import com.example.demo.exception.*;
 import com.example.demo.model.agriculture.*;
 import com.example.demo.model.httpResponse.ApiResult;
@@ -121,20 +123,38 @@ public class ScheduleController {
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    @PostMapping("/add")
-    public ResponseEntity<ApiResult> addSchedule(@RequestBody ScheduleDTO scheduleDTO) {
+    @PostMapping("/create")
+    public ResponseEntity<ApiResult> addSchedule(@RequestBody AddScheduleRequest addScheduleRequest) {
         try {
-            Schedule schedule = scheduleMapper.toEntity(scheduleDTO);
-            schedule.setDate(LocalDate.now());
-            Schedule savedSchedule = scheduleService.saveSchedule(schedule);
-            irrigationScheduleManager.manageIrrigationScheduleForCrop(savedSchedule.getCrop());
+            Schedule schedule = scheduleMapper.toEntity(addScheduleRequest);
+            Schedule addedSchedule = scheduleService.addSchedule(schedule);
+            irrigationScheduleManager.manageIrrigationScheduleForCrop(addedSchedule.getCrop());
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new WrappedEntity<>(scheduleMapper.toDto(savedSchedule)));
+                    .body(new WrappedEntity<>(scheduleMapper.toDto(addedSchedule)));
         } catch (RuntimeException ex) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                     .body(new Error(ex.getMessage()));
         } catch (Exception ex) {
             log.error("An error occurred while adding the schedule: ", ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new Error("An unexpected error occurred."));
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @PostMapping("/update")
+    public ResponseEntity<ApiResult> updateSchedule(@RequestBody UpdateScheduleRequest updateScheduleRequest) {
+        try {
+            Schedule schedule = scheduleMapper.toEntity(updateScheduleRequest);
+            Schedule savedSchedule = scheduleService.saveSchedule(schedule);
+            irrigationScheduleManager.manageIrrigationScheduleForCrop(savedSchedule.getCrop());
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new WrappedEntity<>(scheduleMapper.toDto(savedSchedule)));
+        } catch (SaveRecordFailException ex) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .body(new Error(ex.getMessage()));
+        } catch (Exception ex) {
+            log.error("An error occurred while updating the schedule: ", ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new Error("An unexpected error occurred."));
         }

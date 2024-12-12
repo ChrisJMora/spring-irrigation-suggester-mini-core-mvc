@@ -1,19 +1,28 @@
 package com.example.demo.utils.mapper.imp;
 
+import com.example.demo.dto.AddScheduleRequest;
 import com.example.demo.dto.ScheduleDTO;
+import com.example.demo.dto.UpdateScheduleRequest;
 import com.example.demo.model.agriculture.Crop;
 import com.example.demo.model.agriculture.Schedule;
+import com.example.demo.model.agriculture.ScheduleStatus;
 import com.example.demo.service.CropService;
+import com.example.demo.service.ScheduleService;
 import com.example.demo.utils.mapper.ScheduleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ScheduleMapperImp implements ScheduleMapper {
 
+    @Autowired
+    private ScheduleService scheduleService;
     @Autowired
     private CropService cropService;
 
@@ -23,7 +32,7 @@ public class ScheduleMapperImp implements ScheduleMapper {
         ScheduleDTO scheduleDTO = new ScheduleDTO();
 
         scheduleDTO.setId(schedule.getId());
-        scheduleDTO.setStatus(schedule.getStatus());
+        scheduleDTO.setStatus(schedule.getStatus().getDescription());
         scheduleDTO.setDate(schedule.getDate());
         scheduleDTO.setCreatedAt(schedule.getCreatedAt());
         scheduleDTO.setUpdatedAt(schedule.getUpdatedAt());
@@ -36,19 +45,39 @@ public class ScheduleMapperImp implements ScheduleMapper {
     }
 
     @Override
-    public Schedule toEntity(ScheduleDTO scheduleDTO) {
-        if (scheduleDTO == null) return null;
+    public Schedule toEntity(AddScheduleRequest addScheduleRequest) {
+        if (addScheduleRequest == null) return null;
         Schedule schedule = new Schedule();
 
-        schedule.setId(scheduleDTO.getId());
-        schedule.setStatus(scheduleDTO.getStatus());
-        schedule.setDate(scheduleDTO.getDate());
-        schedule.setCreatedAt(scheduleDTO.getCreatedAt());
-        schedule.setUpdatedAt(scheduleDTO.getUpdatedAt());
-        Crop crop = cropService.getCropById(scheduleDTO.getCropId());
+        schedule.setDate(LocalDate.now());
+        schedule.setStatus(ScheduleStatus.PENDING);
+        schedule.setStartTime(addScheduleRequest.getStartTime());
+        schedule.setEndTime(addScheduleRequest.getEndTime());
+        Crop crop = cropService.getCropById(addScheduleRequest.getCropId());
         schedule.setCrop(crop);
-        schedule.setStartTime(scheduleDTO.getStartTime());
-        schedule.setEndTime(scheduleDTO.getEndTime());
+        schedule.setCreatedAt(LocalDateTime.now());
+        schedule.setUpdatedAt(LocalDateTime.now());
+
+        return schedule;
+    }
+
+    @Override
+    public Schedule toEntity(UpdateScheduleRequest updateScheduleRequest) {
+        if (updateScheduleRequest == null) return null;
+        Schedule schedule = new Schedule();
+
+        schedule.setId(updateScheduleRequest.getId());
+        schedule.setDate(LocalDate.now());
+        schedule.setStatus(ScheduleStatus.PENDING);
+        schedule.setStartTime(updateScheduleRequest.getStartTime());
+        schedule.setEndTime(updateScheduleRequest.getEndTime());
+
+        Schedule existingSchedule =
+                scheduleService.getScheduleById(updateScheduleRequest.getId());
+
+        schedule.setCrop(existingSchedule.getCrop());
+        schedule.setCreatedAt(existingSchedule.getCreatedAt());
+        schedule.setUpdatedAt(LocalDateTime.now());
 
         return schedule;
     }
@@ -64,11 +93,11 @@ public class ScheduleMapperImp implements ScheduleMapper {
     }
 
     @Override
-    public List<Schedule> toEntityList(List<ScheduleDTO> scheduleDTOs) {
-        if (scheduleDTOs == null) return null;
-        List<Schedule> list = new ArrayList<>( scheduleDTOs.size() );
-        for ( ScheduleDTO scheduleDTO : scheduleDTOs ) {
-            list.add( toEntity(scheduleDTO) );
+    public List<Schedule> toEntityList(List<AddScheduleRequest> requests) {
+        if (requests == null) return null;
+        List<Schedule> list = new ArrayList<>( requests.size() );
+        for ( AddScheduleRequest request : requests ) {
+            list.add( toEntity(request) );
         }
         return list;
     }

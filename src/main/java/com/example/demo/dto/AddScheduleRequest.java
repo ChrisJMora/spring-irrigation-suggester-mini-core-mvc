@@ -5,12 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalTime;
+
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddCropRequest {
-    private CropDTO cropData;
-    private int numberOfSensors;
-    private int numberOfSprinklers;
-    private String irrigationType;
+public class AddScheduleRequest {
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private Long cropId;
 }

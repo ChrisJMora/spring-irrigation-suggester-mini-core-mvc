@@ -39,4 +39,6 @@ public interface ForecastService {
      * @throws SaveRecordFailException When the forecast could not be saved.
      */
     Forecast saveForecast(Forecast forecast);
+
+    Forecast getOrCreateTodayForecast();
 }

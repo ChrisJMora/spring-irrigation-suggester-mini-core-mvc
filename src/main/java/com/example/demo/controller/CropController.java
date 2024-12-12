@@ -6,6 +6,7 @@ import com.example.demo.exception.EmptyRecordException;
 import com.example.demo.exception.EmptyTableException;
 import com.example.demo.exception.SaveRecordFailException;
 import com.example.demo.model.agriculture.Crop;
+import com.example.demo.model.agriculture.IrrigationType;
 import com.example.demo.model.httpResponse.ApiResult;
 import com.example.demo.model.httpResponse.Error;
 import com.example.demo.model.httpResponse.WrappedEntity;
@@ -60,16 +61,19 @@ public class CropController {
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    @PutMapping("/crops/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<ApiResult> updateCrop(@PathVariable Long id,
                                                 @Valid @RequestBody CropDTO cropDTO) {
         if (!id.equals(cropDTO.getId())) {
-            return ResponseEntity.badRequest()
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new Error("Invalid crop ID in request body."));
         }
         try {
-            cropService.getCropById(id);
-            Crop updatedCrop = cropService.saveCrop(cropMapper.toEntity(cropDTO));
+            Crop existingCrop = cropService.getCropById(id);
+            Crop crop = cropMapper.toEntity(cropDTO);
+            crop.setSoil(existingCrop.getSoil());
+            crop.setLocation(existingCrop.getLocation());
+            Crop updatedCrop = cropService.saveCrop(crop);
             irrigationScheduleManager.manageIrrigationScheduleForCrop(updatedCrop);
             return ResponseEntity.ok(new WrappedEntity<>(cropMapper.toDTO(updatedCrop)));
         } catch (EmptyRecordException ex) {
@@ -88,7 +92,7 @@ public class CropController {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     @PostMapping("/create")
     public ResponseEntity<ApiResult> addCrop(@RequestBody AddCropRequest cropRequest) {
-        Crop crop = cropMapper.toEntity(cropRequest.getCropDTO());
+        Crop crop = cropMapper.toEntity(cropRequest.getCropData());
         try {
             crop.setLocation(locationService.createRandomLocation());
             crop.setSoil(soilService.getRandomSoil());
@@ -100,10 +104,10 @@ public class CropController {
                     .body(new Error("No soils found in the database: " + ex.getMessage()));
         }
         try {
+            IrrigationType irrigationType = IrrigationType.fromDescription(cropRequest.getIrrigationType());
             Crop savedCrop = cropService.saveCrop(crop);
             sensorService.createSensors(crop, cropRequest.getNumberOfSensors());
-            sprinklerService.createSprinklers(crop, cropRequest.getNumberOfSprinklers(),
-                    cropRequest.getIrrigationType());
+            sprinklerService.createSprinklers(crop, cropRequest.getNumberOfSprinklers(), irrigationType);
             irrigationScheduleManager.manageIrrigationScheduleForCrop(savedCrop);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new WrappedEntity<>(cropMapper.toDTO(savedCrop)));

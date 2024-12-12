@@ -19,7 +19,8 @@ public class EmulateSensorRecords {
     @Autowired
     private SensorService sensorService;
 
-    @Scheduled(cron = "0 0/1 * * * ?") // Every minute
+//    @Scheduled(cron = "0 0/1 * * * ?") // Every minute
+    @Scheduled(cron = "0 0 */4 * * ?") // Every 4 hours
     public void CreateRecordsForAllSensors() {
         try {
             // Get all sensors, if the list is empty throw EmptyTableException
