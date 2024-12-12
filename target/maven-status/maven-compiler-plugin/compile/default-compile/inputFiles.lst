@@ -1,4 +1,5 @@
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\admin\JwtUtil.java
+C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\tasks\IrrigationScheduleManager.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\utils\converterer\SprinklerStatusConverter.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\dto\CropDTO.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\controller\CropController.java
@@ -14,7 +15,6 @@ C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\examp
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\persistence\SoilRepository.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\admin\CustomUserDetailsService.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\controller\ForecastController.java
-C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\tasks\CreateRandomForecastInstance.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\dto\SensorRecordDTO.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\utils\mapper\SensorRecordMapper.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\service\imp\ForecastServiceImp.java
@@ -30,6 +30,7 @@ C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\examp
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\model\admin\UserEntity.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\persistence\SensorRepository.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\service\ScheduleService.java
+C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\dto\AddScheduleRequest.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\controller\UserController.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\utils\mapper\SoilMapper.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\utils\converterer\IrrigationTypeConverter.java
@@ -43,10 +44,10 @@ C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\examp
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\service\imp\CropServiceImp.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\model\agriculture\SuggestedSchedule.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\model\agriculture\Sensor.java
-C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\tasks\CreateRandomSensorRecordInstance.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\persistence\ForecastRepository.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\persistence\ScheduleRepository.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\admin\LoginRequest.java
+C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\utils\statistics\NormalDistributionServiceImp.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\utils\mapper\imp\SensorRecordMapperImp.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\model\agriculture\IrrigationType.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\service\SprinklerService.java
@@ -56,6 +57,7 @@ C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\examp
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\exception\admin\NoSuchUserExistsException.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\exception\SaveRecordFailException.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\dto\SuggestedScheduleDTO.java
+C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\exception\ScheduleConflictException.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\model\httpResponse\Error.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\admin\JwtAuthenticationFilter.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\utils\mapper\SuggestedScheduleMapper.java
@@ -63,11 +65,13 @@ C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\examp
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\model\agriculture\Schedule.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\service\imp\SoilServiceImp.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\service\imp\SensorServiceImp.java
-C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\tasks\ScheduleSuggestion.java
+C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\tasks\EmulateSensorRecords.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\model\admin\Employee.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\utils\converterer\ScheduleStatusConverter.java
+C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\tasks\WaterCalculator.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\utils\mapper\SprinklerMapper.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\service\imp\LocationServiceImp.java
+C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\utils\statistics\NormalDistributionService.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\config\SecurityConfig.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\exception\EmptyTableException.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\exception\admin\IncorrectCredentialsException.java
@@ -77,9 +81,12 @@ C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\examp
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\service\CropService.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\model\agriculture\Location.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\service\imp\SprinklerServiceImp.java
+C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\tasks\IrrigationScheduleSuggester.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\utils\mapper\ForecastMapper.java
+C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\exception\FutureScheduleException.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\model\httpResponse\ErrorDetail.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\controller\LocationController.java
+C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\dto\UpdateScheduleRequest.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\utils\mapper\LocationMapper.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\service\LocationService.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\utils\converterer\SuggestedScheduleStatusConverter.java
@@ -90,9 +97,14 @@ C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\examp
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\dto\SprinklerDTO.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\persistence\LocationRepository.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\model\agriculture\Crop.java
+C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\exception\GlobalExceptionHandler.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\model\httpResponse\WrappedEntity.java
+C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\tasks\ForecastEmulator.java
+C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\dto\AddCropRequest.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\model\agriculture\Soil.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\controller\SensorController.java
+C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\tasks\IrrigationScheduleValidator.java
+C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\tasks\IrrigationScheduleService.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\utils\mapper\imp\LocationMapperImp.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\controller\SoilController.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\persistence\CropRepository.java
