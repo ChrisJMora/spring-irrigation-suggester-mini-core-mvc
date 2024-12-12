@@ -1,6 +1,7 @@
 com\example\demo\persistence\ForecastRepository.class
 com\example\demo\controller\SoilController.class
 com\example\demo\model\admin\UserType.class
+com\example\demo\config\AppConfig.class
 com\example\demo\model\agriculture\SensorRecord.class
 com\example\demo\utils\mapper\imp\ScheduleMapperImp.class
 com\example\demo\model\agriculture\SprinklerStatus.class
