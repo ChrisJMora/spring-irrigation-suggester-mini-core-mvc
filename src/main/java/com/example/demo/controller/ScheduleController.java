@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "https://irrigation-suggester-mini-core-service.onrender.com")
 @RestController
 @RequestMapping("/api/schedule")
 public class ScheduleController {

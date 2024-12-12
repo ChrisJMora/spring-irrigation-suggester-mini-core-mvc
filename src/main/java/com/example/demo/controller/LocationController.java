@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "https://irrigation-suggester-mini-core-service.onrender.com")
 @RestController
 @RequestMapping("/api/location")
 public class LocationController {
