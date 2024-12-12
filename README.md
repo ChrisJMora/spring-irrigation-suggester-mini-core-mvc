@@ -65,6 +65,11 @@ La API permite realizar las siguientes operaciones:
 - **Java JWT API, Impl y Jackson** (versión 0.11.5, runtime)
 - **Spring Boot Starter Validation**
 
+### Credenciales de Acceso
+
+- **Usuario**: admin1
+- **Contraseña**: password1
+
 ## Enlaces de la API
 
 El backend está desplegado en Render y está disponible en el siguiente enlace:
