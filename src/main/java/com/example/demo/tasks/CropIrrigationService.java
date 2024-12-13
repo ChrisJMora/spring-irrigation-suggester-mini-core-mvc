@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,25 +31,24 @@ public class CropIrrigationService {
 
     public List<CropWaterIrrigated> getTopThreeIrrigatedCrops(LocalDate startDate, LocalDate endDate) {
         List<Crop> crops = cropService.getAllCrops();
-        Map<Crop, Double> waterUsageMap = new HashMap<>();
+        Map<Crop, Integer> irrigationCountMap = new HashMap<>();
 
         for (Crop crop : crops) {
-            double totalWaterUsed = 0;
+            int timesIrrigated = 0;
             List<Schedule> schedules = scheduleService.getAllScheduleByCrop(crop);
             for (Schedule schedule : schedules) {
                 if (!schedule.getDate().isBefore(startDate) && !schedule.getDate().isAfter(endDate)) {
-                    LocalTime irrigationDuration = waterCalculator.calculateIrrigationDuration(schedule.getStartTime(), schedule.getEndTime());
-                    totalWaterUsed += waterCalculator.calculateIrrigatedWaterVolume(irrigationDuration);
+                    timesIrrigated += 1;
                 }
             }
-            if (totalWaterUsed > 0) {
-                waterUsageMap.put(crop, totalWaterUsed);
+            if (timesIrrigated > 0) {
+                irrigationCountMap.put(crop, timesIrrigated);
             }
         }
 
-        List<CropWaterIrrigated> topThreeCrops = waterUsageMap.entrySet()
+        List<CropWaterIrrigated> topThreeCrops = irrigationCountMap.entrySet()
                 .stream()
-                .sorted(Map.Entry.<Crop, Double>comparingByValue().reversed())
+                .sorted(Map.Entry.<Crop, Integer>comparingByValue().reversed())
                 .limit(3)
                 .map(entry -> new CropWaterIrrigated(cropMapper.toDTO(entry.getKey()), entry.getValue()))
                 .collect(Collectors.toList());
@@ -58,7 +56,7 @@ public class CropIrrigationService {
         // Log de los tres mejores cultivos
         log.info("Top 3 cultivos más regados:");
         for (CropWaterIrrigated cropWaterIrrigated : topThreeCrops) {
-            log.info("Cultivo: {}, Agua utilizada: {} l/m2", cropWaterIrrigated.getCrop().getName(), cropWaterIrrigated.getTotalWaterIrrigated());
+            log.info("Cultivo: {}, Número de riegos: {}", cropWaterIrrigated.getCrop().getName(), cropWaterIrrigated.getTotalWaterIrrigated());
         }
 
         return topThreeCrops;

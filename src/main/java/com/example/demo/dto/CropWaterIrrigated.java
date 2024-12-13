@@ -10,5 +10,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CropWaterIrrigated {
     private CropDTO crop;
-    private double totalWaterIrrigated;
+    private int totalWaterIrrigated;
 }
