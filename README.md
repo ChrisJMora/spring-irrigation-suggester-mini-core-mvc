@@ -1,18 +1,26 @@
-# Backend para Gestión de Usuarios con Spring Boot y MSSQL
+# Backend para Sugerencia de Cronogramas de Riego
 
-Este proyecto es una API RESTful creada con **Spring Boot** para manejar operaciones CRUD sobre clientes. La base de datos utilizada es **Microsoft SQL Server (MSSQL)**, y el frontend está desarrollado en **Vue.js**. El proyecto utiliza **Maven** como gestor de dependencias.
+Este proyecto es una API RESTful creada con **Spring Boot** para gestionar cronogramas de riego de cultivos. Utiliza sensores para medir el porcentaje de humedad y pronósticos de lluvia para sugerir cronogramas de riego personalizados. La base de datos utilizada es **PostgreSQL**, y el frontend puede desarrollarse con cualquier framework moderno para consumir los endpoints expuestos.
 
 ## Descripción
 
-La API permite realizar las siguientes operaciones sobre clientes:
-- Crear un nuevo cliente
-- Obtener todos los clientes
-- Autenticar un cliente mediante credenciales
-- Buscar cliente por nombre de usuario o correo electrónico
-- Actualizar un cliente existente
-- Eliminar un cliente por nombre de usuario o correo electrónico
+La API permite realizar las siguientes operaciones:
 
-El frontend, desarrollado en **Vue.js**, interactúa con esta API para visualizar y gestionar la información de los clientes.
+### Administración de Cultivos
+- Obtener todos los cultivos registrados.
+- Crear nuevos cultivos con sensores y aspersores asociados.
+- Actualizar la información de un cultivo existente.
+
+### Pronósticos Meteorológicos
+- Obtener todos los pronósticos almacenados.
+- Actualizar aleatoriamente el pronóstico del día actual.
+
+### Cronogramas de Riego
+- Obtener todos los cronogramas de riego registrados.
+- Obtener cronogramas de riego sugeridos.
+- Aceptar un cronograma sugerido.
+- Cancelar un cronograma existente.
+- Crear o actualizar cronogramas manualmente.
 
 ## Instalación
 
@@ -26,9 +34,9 @@ El frontend, desarrollado en **Vue.js**, interactúa con esta API para visualiza
     cd <NOMBRE_DEL_PROYECTO>
     ```
 
-3. Configura la conexión a la base de datos MSSQL en el archivo `application.properties`:
+3. Configura la conexión a la base de datos PostgreSQL en el archivo `application.properties`:
     ```properties
-    spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=<NOMBRE_DB>
+    spring.datasource.url=jdbc:postgresql://localhost:5432/<NOMBRE_DB>
     spring.datasource.username=<TU_USUARIO>
     spring.datasource.password=<TU_CONTRASEÑA>
     ```
@@ -45,18 +53,58 @@ El frontend, desarrollado en **Vue.js**, interactúa con esta API para visualiza
 
 ## Dependencias
 
-- **Spring Boot** (Web, JPA, DevTools)
-- **MSSQL Driver** para la base de datos
-- **Vue.js** para el frontend
-- **Maven** como gestor de dependencias
+- **Spring Boot Starter Data JPA**
+- **Spring Boot Starter Web**
+- **Microsoft SQL Server JDBC Driver** (runtime)
+- **Lombok** (opcional)
+- **Spring Boot Starter Test** (test)
+- **PostgreSQL Driver** (versión 42.6.0)
+- **Spring Boot Starter Security**
+- **MapStruct** (versión 1.5.5.Final)
+- **MapStruct Processor** (provided)
+- **Java JWT API, Impl y Jackson** (versión 0.11.5, runtime)
+- **Spring Boot Starter Validation**
+
+### Credenciales de Acceso
+
+- **Usuario**: admin1
+- **Contraseña**: password1
+
+## Enlaces de la API
+
+El backend está desplegado en Render y está disponible en el siguiente enlace:
+
+- **Backend**: [https://irrigation-suggester-mini-core-service.onrender.com](https://irrigation-suggester-mini-core-service.onrender.com)
 
 ## Endpoints de la API
 
-| Método HTTP | Endpoint                  | Descripción                                                       |
-|-------------|---------------------------|-------------------------------------------------------------------|
-| POST        | `/api/clients/create`      | Crear un nuevo cliente                                            |
-| GET         | `/api/clients/all`         | Obtener todos los clientes                                        |
-| POST        | `/api/clients/auth`        | Autenticar cliente con credenciales                               |
-| GET         | `/api/clients`             | Buscar cliente por nombre de usuario o correo electrónico         |
-| PUT         | `/api/clients/update`      | Actualizar cliente por nombre de usuario o correo electrónico      |
-| DELETE      | `/api/clients/delete`      | Eliminar cliente por nombre de usuario o correo electrónico        |
+### Administración de Cultivos
+
+| Método HTTP | Endpoint         | Descripción                                   |
+|--------------|------------------|-----------------------------------------------|
+| GET          | `/api/crop/all`  | Obtener todos los cultivos registrados        |
+| POST         | `/api/crop/create` | Crear un nuevo cultivo                        |
+| PUT          | `/api/crop/update/{id}` | Actualizar un cultivo existente              |
+
+### Pronósticos Meteorológicos
+
+| Método HTTP | Endpoint          | Descripción                                   |
+|--------------|-------------------|-----------------------------------------------|
+| GET          | `/api/forecast/all` | Obtener todos los pronósticos registrados     |
+| POST         | `/api/forecast/random` | Actualizar aleatoriamente el pronóstico del día |
+
+### Cronogramas de Riego
+
+| Método HTTP | Endpoint                     | Descripción                                         |
+|--------------|------------------------------|---------------------------------------------------|
+| GET          | `/api/schedule/all`          | Obtener todos los cronogramas registrados         |
+| GET          | `/api/schedule/suggested/all`| Obtener cronogramas de riego sugeridos           |
+| POST         | `/api/schedule/suggested/accept` | Aceptar un cronograma sugerido                   |
+| POST         | `/api/schedule/cancel`       | Cancelar un cronograma existente                 |
+| POST         | `/api/schedule/create`       | Crear un nuevo cronograma                        |
+| POST         | `/api/schedule/update`       | Actualizar un cronograma existente               |
+
+## Notas
+
+Este proyecto incluye un módulo de seguridad que restringe el acceso a ciertos endpoints según roles de usuario como **ADMINISTRATOR** y **SUPERVISOR**. Asegúrate de configurar correctamente los roles en la base de datos para un funcionamiento adecuado.
+
