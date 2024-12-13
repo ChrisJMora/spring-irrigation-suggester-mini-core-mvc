@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.AddCropRequest;
 import com.example.demo.dto.CropDTO;
+import com.example.demo.dto.CropWaterIrrigated;
+import com.example.demo.dto.TimeInterval;
 import com.example.demo.exception.EmptyRecordException;
 import com.example.demo.exception.EmptyTableException;
 import com.example.demo.exception.SaveRecordFailException;
@@ -11,6 +13,7 @@ import com.example.demo.model.httpResponse.ApiResult;
 import com.example.demo.model.httpResponse.Error;
 import com.example.demo.model.httpResponse.WrappedEntity;
 import com.example.demo.service.*;
+import com.example.demo.tasks.CropIrrigationService;
 import com.example.demo.tasks.IrrigationScheduleManager;
 import com.example.demo.utils.mapper.CropMapper;
 import jakarta.validation.Valid;
@@ -42,6 +45,8 @@ public class CropController {
     private CropMapper cropMapper;
     @Autowired
     private IrrigationScheduleManager irrigationScheduleManager;
+    @Autowired
+    private CropIrrigationService cropIrrigationService;
 
     @PreAuthorize("hasRole('ADMINISTRATOR') Or hasRole('SUPERVISOR')")
     @GetMapping("/all")
@@ -49,6 +54,23 @@ public class CropController {
         try {
             List<Crop> crops = cropService.getAllCrops();
             return ResponseEntity.ok(new WrappedEntity<>(cropMapper.toDtoList(crops)));
+        } catch (EmptyTableException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Error(ex.getMessage()));
+        } catch (Exception ex) {
+            log.error("An error occurred while retrieving crops: ", ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new Error("An unexpected error occurred."));
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMINISTRATOR') Or hasRole('SUPERVISOR')")
+    @PostMapping("/top")
+    public ResponseEntity<ApiResult> getTopThreeMostIrrigatedCrops(@RequestBody TimeInterval timeInterval) {
+        try {
+            List<CropWaterIrrigated> crops =
+                    cropIrrigationService.getTopThreeIrrigatedCrops(timeInterval.getStartDate(), timeInterval.getEndDate());
+            return ResponseEntity.ok(new WrappedEntity<>(crops));
         } catch (EmptyTableException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new Error(ex.getMessage()));

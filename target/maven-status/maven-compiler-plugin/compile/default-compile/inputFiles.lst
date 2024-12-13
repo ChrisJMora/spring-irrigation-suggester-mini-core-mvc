@@ -31,6 +31,7 @@ C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\examp
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\persistence\SensorRepository.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\service\ScheduleService.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\dto\AddScheduleRequest.java
+C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\tasks\CropIrrigationService.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\controller\UserController.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\utils\mapper\SoilMapper.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\utils\converterer\IrrigationTypeConverter.java
@@ -75,6 +76,7 @@ C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\examp
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\utils\statistics\NormalDistributionService.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\config\SecurityConfig.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\exception\EmptyTableException.java
+C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\dto\CropWaterIrrigated.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\exception\admin\IncorrectCredentialsException.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\dto\SoilDTO.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\service\imp\UserServiceImp.java
@@ -100,6 +102,7 @@ C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\examp
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\model\agriculture\Crop.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\exception\GlobalExceptionHandler.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\model\httpResponse\WrappedEntity.java
+C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\dto\TimeInterval.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\tasks\ForecastEmulator.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\dto\AddCropRequest.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\model\agriculture\Soil.java

@@ -15,4 +15,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findByCropAndStatusAndDate(Crop crop,
                                               ScheduleStatus status,
                                               LocalDate date);
+    List<Schedule> findByCrop(Crop crop);
 }

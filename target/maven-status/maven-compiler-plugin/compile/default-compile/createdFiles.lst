@@ -1,3 +1,4 @@
+com\example\demo\dto\CropWaterIrrigated.class
 com\example\demo\persistence\ForecastRepository.class
 com\example\demo\controller\SoilController.class
 com\example\demo\model\admin\UserType.class
@@ -46,6 +47,8 @@ com\example\demo\model\agriculture\Soil.class
 com\example\demo\persistence\SensorRepository.class
 com\example\demo\utils\mapper\SuggestedScheduleMapper.class
 com\example\demo\model\agriculture\Forecast.class
+com\example\demo\tasks\CropIrrigationService.class
+com\example\demo\dto\TimeInterval.class
 com\example\demo\model\agriculture\IrrigationType.class
 com\example\demo\utils\mapper\imp\CropMapperImp.class
 com\example\demo\model\agriculture\ScheduleStatus.class

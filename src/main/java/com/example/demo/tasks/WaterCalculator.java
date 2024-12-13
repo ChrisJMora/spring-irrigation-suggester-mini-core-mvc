@@ -112,7 +112,8 @@ public class WaterCalculator {
         return totalIrrigatedWater;
     }
 
-    private LocalTime calculateIrrigationDuration(LocalTime start, LocalTime end) {
+    public LocalTime calculateIrrigationDuration(LocalTime start,
+                                                LocalTime end) {
         Duration duration = Duration.between(start, end);
         long hours = duration.toHours();
         long minutes = duration.toMinutes() % 60;

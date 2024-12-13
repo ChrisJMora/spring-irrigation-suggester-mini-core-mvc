@@ -80,6 +80,8 @@ public interface ScheduleService {
      */
     List<SuggestedSchedule> getAllSuggestedScheduleByStatus(SuggestedScheduleStatus status);
 
+    List<Schedule> getAllScheduleByCrop(Crop crop);
+
     /**
      * Creates or updates a suggested schedule in the database.
      * If the suggested schedule is not saved successfully, an exception is thrown.

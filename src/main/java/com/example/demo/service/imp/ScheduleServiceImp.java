@@ -133,6 +133,13 @@ public class ScheduleServiceImp implements ScheduleService {
         return schedules;
     }
 
+    @Override
+    public List<Schedule> getAllScheduleByCrop(Crop crop) {
+        List<Schedule> schedules = scheduleRepository.findByCrop(crop);
+        if (schedules.isEmpty()) throw new EmptyFilterException(Schedule.class, Crop.class);
+        return schedules;
+    }
+
     /**
      * Creates or updates a suggested schedule in the database.
      * If the suggested schedule is not saved successfully, an exception is thrown.
