@@ -7,6 +7,7 @@ import com.example.demo.model.agriculture.Schedule;
 import com.example.demo.service.CropService;
 import com.example.demo.service.ScheduleService;
 import com.example.demo.utils.mapper.CropMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class CropIrrigationService {
     @Autowired
@@ -36,19 +38,29 @@ public class CropIrrigationService {
             double totalWaterUsed = 0;
             List<Schedule> schedules = scheduleService.getAllScheduleByCrop(crop);
             for (Schedule schedule : schedules) {
-                if (!schedule.getDate().isAfter(startDate) && !schedule.getDate().isBefore(endDate)) {
+                if (!schedule.getDate().isBefore(startDate) && !schedule.getDate().isAfter(endDate)) {
                     LocalTime irrigationDuration = waterCalculator.calculateIrrigationDuration(schedule.getStartTime(), schedule.getEndTime());
                     totalWaterUsed += waterCalculator.calculateIrrigatedWaterVolume(irrigationDuration);
                 }
             }
-            waterUsageMap.put(crop, totalWaterUsed);
+            if (totalWaterUsed > 0) {
+                waterUsageMap.put(crop, totalWaterUsed);
+            }
         }
 
-        return waterUsageMap.entrySet()
+        List<CropWaterIrrigated> topThreeCrops = waterUsageMap.entrySet()
                 .stream()
                 .sorted(Map.Entry.<Crop, Double>comparingByValue().reversed())
                 .limit(3)
                 .map(entry -> new CropWaterIrrigated(cropMapper.toDTO(entry.getKey()), entry.getValue()))
                 .collect(Collectors.toList());
+
+        // Log de los tres mejores cultivos
+        log.info("Top 3 cultivos más regados:");
+        for (CropWaterIrrigated cropWaterIrrigated : topThreeCrops) {
+            log.info("Cultivo: {}, Agua utilizada: {} l/m2", cropWaterIrrigated.getCrop().getName(), cropWaterIrrigated.getTotalWaterIrrigated());
+        }
+
+        return topThreeCrops;
     }
 }
