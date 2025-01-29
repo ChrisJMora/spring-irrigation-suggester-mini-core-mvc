@@ -1,9 +1,9 @@
 package com.example.demo.tasks;
 
-import com.example.demo.model.agriculture.Crop;
-import com.example.demo.model.agriculture.SuggestedSchedule;
-import com.example.demo.service.CropService;
-import com.example.demo.service.ScheduleService;
+import com.example.demo.domain.models.Crop;
+import com.example.demo.domain.models.SuggestedSchedule;
+import com.example.demo.application.ports.services.CropService;
+import com.example.demo.application.ports.services.ScheduleService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
