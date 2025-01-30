@@ -50,6 +50,7 @@ com\example\demo\application\services\SensorServiceImp.class
 com\example\demo\application\utils\CropMapperImp.class
 com\example\demo\domain\models\UserType.class
 com\example\demo\domain\models\Location.class
+com\example\demo\domain\ports\SprinklerBuilderPort.class
 com\example\demo\application\utils\SuggestedScheduleMapperImp.class
 com\example\demo\application\usecases\ForecastEmulator.class
 com\example\demo\domain\models\ResponseStatus.class
@@ -78,6 +79,7 @@ com\example\demo\application\ports\services\SoilService.class
 com\example\demo\domain\utils\factories\SprinklerFactory.class
 com\example\demo\interfaces\controllers\LocationController.class
 com\example\demo\domain\exceptions\admin\IncorrectCredentialsException.class
+com\example\demo\domain\ports\SprinklerFactoryPort.class
 com\example\demo\application\services\CropServiceImp.class
 com\example\demo\interfaces\controllers\SprinklerController.class
 com\example\demo\domain\models\SortableElement.class

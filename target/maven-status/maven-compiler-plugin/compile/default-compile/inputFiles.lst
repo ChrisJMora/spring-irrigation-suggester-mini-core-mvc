@@ -100,6 +100,7 @@ C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\examp
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\application\usecases\IrrigationScheduleSuggester.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\domain\models\ScheduleStatus.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\infraestructure\config\security\admin\LoginResponse.java
+C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\domain\ports\SprinklerFactoryPort.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\infraestructure\config\AppConfig.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\interfaces\controllers\ScheduleController.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\application\services\SensorServiceImp.java
@@ -108,6 +109,7 @@ C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\examp
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\infraestructure\config\security\admin\JwtUtil.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\domain\models\Sensor.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\domain\models\SensorRecord.java
+C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\domain\ports\SprinklerBuilderPort.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\infraestructure\repositories\CropRepository.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\interfaces\controllers\SoilController.java
 C:\Users\chris\Documents\CoreMVC\Spring-Backend-Core-MVC\src\main\java\com\example\demo\domain\models\UserEntity.java
