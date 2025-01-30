@@ -20,4 +20,6 @@ public class CropDTO {
     @NotNull(message = "The root height cant be null")
     @Min(value = 0, message = "The root height must be greater than zero")
     private float rootHeight;
+
+    private LocationDTO location;
 }

@@ -21,10 +21,12 @@ import java.util.List;
 @Service
 public class SprinklerServiceImp implements SprinklerService {
 
+    private final SprinklerFactory factory;
     private final SprinklerRepository repository;
 
     @Autowired
-    public SprinklerServiceImp(SprinklerRepository repository) {
+    public SprinklerServiceImp(SprinklerFactory factory, SprinklerRepository repository) {
+        this.factory = factory;
         this.repository = repository;
     }
 
@@ -54,7 +56,7 @@ public class SprinklerServiceImp implements SprinklerService {
     public List<Sprinkler> createSprinklers(Crop crop, int quantity, IrrigationType irrigationType) {
         List<Sprinkler> sprinklers = new ArrayList<>();
         for (int i = 0; i < quantity; i++) {
-            sprinklers.add(new SprinklerFactory().create(crop, irrigationType));
+            sprinklers.add(factory.create(crop, irrigationType));
         }
         return saveSprinklers(sprinklers);
     }
