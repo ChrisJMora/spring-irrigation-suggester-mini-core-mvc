@@ -16,7 +16,7 @@ import java.util.function.Function;
 public class JwtUtil {
 
     private final Key SECRET_KEY = Keys.hmacShaKeyFor(
-            "clave_secreta_segura_1234567890123456".getBytes());
+            "clave_segura_12345678901234567890123456789012".getBytes());
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
