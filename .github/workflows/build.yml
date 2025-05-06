@@ -1,14 +1,14 @@
-name: Debug Maven Commands
+name: Build and Analyze
 
 on:
-  workflow_dispatch: # Permite ejecutar manualmente desde la UI de GitHub
   push:
     branches:
       - main
+  workflow_dispatch: # Permite ejecutar manualmente
 
 jobs:
-  debug:
-    name: Run Maven Commands
+  build:
+    name: Build and analyze
     runs-on: [self-hosted, Windows, X64]
     
     steps:
@@ -23,6 +23,13 @@ jobs:
           java-version: 21
           distribution: 'zulu'
 
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
       - name: Cache Maven packages
         uses: actions/cache@v4
         with:
@@ -30,8 +37,8 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Clean project
-        run: mvn clean
+      - name: Build project
+        run: mvn -B verify # Compila y ejecuta pruebas
 
       - name: Run SonarQube analysis
         env:
