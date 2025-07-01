@@ -17,7 +17,7 @@ import java.util.Collections;
 @AllArgsConstructor
 @Getter @Setter
 @Entity
-@Table(name = "user", schema = "admin")
+@Table(name = "app_user", schema = "admin")
 public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
